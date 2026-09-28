@@ -1,0 +1,61 @@
+{
+    "instansi":  "BKPSDM Kabupaten Yahukimo",
+    "jumlah":  11,
+    "catatan":  [
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Nama unit berbeda antar dokumen",
+                        "detail":  "\u0027Sub Bidang Penilaian Kinerja Aparatur, Disiplin dan Penghargaan\u0027 (DATA PEGAWAI.xlsx) vs \u0027SUB BIDANG PENILAIAN KINERJA APARATUR\u0027 (STRUKTUR.docx) - kemiripan 0.714"
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Unit belum punya pegawai pada data",
+                        "detail":  "Bidang Pengembangan Aparatur"
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Unit tanpa pejabat definitif",
+                        "detail":  "Sub Bidang Penilaian Kinerja Aparatur, Disiplin dan Penghargaan untuk sementara hanya dijabat Pl./Plt.: TINUS BAHABOL, S.Pd. (198704062015091001)"
+                    },
+                    {
+                        "tingkat":  "penting",
+                        "topik":  "Kepala Badan belum ada pada data pegawai",
+                        "detail":  "DATA PEGAWAI.xlsx memuat Sekretaris (Eselon III.a) tetapi belum memuat Kepala Badan; akun pimpinan tertinggi perlu ditambahkan."
+                    },
+                    {
+                        "tingkat":  "selesai",
+                        "topik":  "Admin Sistem ditetapkan",
+                        "detail":  "Theodorus Valentinus, S.Kom. (NIP 197908132015091001) ditetapkan sebagai Admin Sistem dan diberi role admin."
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Penulisan resmi nama Sub Bidang Fasilitasi dan Profesi ASN",
+                        "detail":  "Ada tiga variasi: \"Sub Bidang Fasilitasi dan Profesi ASN\" (STRUKTUR.docx terbaru), \"Sub Bidang Fasilitasi Profesi ASN\" (DATA PEGAWAI.xlsx), dan \"Fasilitas dan Profesi ASN\" (keterangan lisan). Mohon dipastikan penulisan resmi menurut nomenklatur."
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Nama Sub Bidang Penilaian Kinerja Aparatur",
+                        "detail":  "DATA PEGAWAI.xlsx menulis \"Sub Bidang Penilaian Kinerja Aparatur, Disiplin dan Penghargaan\", STRUKTUR.docx menulis \"Sub Bidang Penilaian Kinerja Aparatur\"."
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Kewenangan Pl./Plt. pada aplikasi",
+                        "detail":  "PENIUS SIEP, S.E. (Pl.) dan TINUS BAHABOL, S.Pd. (Plt.) ber-eselon NON ESELON; usulan role saat ini \"pegawai\". Bila diberi kewenangan disposisi/persetujuan, role diubah menjadi \"pimpinan\"."
+                    },
+                    {
+                        "tingkat":  "perlu_konfirmasi",
+                        "topik":  "Pola email dan login pegawai",
+                        "detail":  "Domain instansi yahukimokab.go.id (email kantor bkpsdm@yahukimokab.go.id). Usulan email pegawai memakai pola nama.tanpa.gelar@yahukimokab.go.id; alternatifnya login memakai NIP - mohon dipilih."
+                    },
+                    {
+                        "tingkat":  "info",
+                        "topik":  "Jabatan fungsional pada Kelompok Jabatan Fungsional",
+                        "detail":  "Analis SDM Aparatur Ahli Pertama dan Pranata SDM Aparatur Terampil dipetakan ke unit \"Kelompok Jabatan Fungsional\" yang dibawahi langsung Kepala Badan."
+                    },
+                    {
+                        "tingkat":  "info",
+                        "topik":  "Kolom tautan eksternal pada Excel",
+                        "detail":  "DATA PEGAWAI.xlsx masih menautkan 4 workbook luar (AGAMA, DATA PNS per 30 Agustus 2026, Jabatan, PANGKAT); sertakan berkasnya bila data tersebut diperlukan."
+                    }
+                ]
+}

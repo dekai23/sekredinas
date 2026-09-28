@@ -1,0 +1,38 @@
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+build/
+dist/
+.turbo/
+*.tsbuildinfo
+
+# --- Environment ---
+.env
+.env.local
+.env*.local
+
+# --- Data & unggahan lokal ---
+*.sqlite
+*.sqlite3
+storage/
+uploads/
+
+# --- Berkas sementara Office (file lock) ---
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# --- Tooling agen (kunci server, tak perlu ikut versi) ---
+.opencode/server.lock.json
+
+# --- Database lokal (PGlite / PostgreSQL dev) ---
+.database/
+*.pglite
+
+# --- Editor & OS ---
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+*.log

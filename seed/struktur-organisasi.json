@@ -1,0 +1,201 @@
+{
+    "instansi":  "BKPSDM Kabupaten Yahukimo",
+    "sumber":  "DATA PEGAWAI.xlsx (kolom JABATAN) + STRUKTUR.docx",
+    "jumlah":  16,
+    "unit":  [
+                 {
+                     "nama":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "jenis":  "badan",
+                     "induk":  null,
+                     "kode":  "BKD",
+                     "jumlahPegawai":  0,
+                     "pejabat":  [
+
+                                 ],
+                     "namaPadaStrukturDocx":  null,
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sekretariat",
+                     "jenis":  "sekretariat",
+                     "induk":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "kode":  "SEK",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "VERNANDUS SIMBONG, ST (198204202011041001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SEKRETARIAT",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Bidang Pengadaan, Pemberhentian dan Informasi",
+                     "jenis":  "bidang",
+                     "induk":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "kode":  "PPI",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "CARLO LANDWIG TANGKUDUNG, SH (198509032009091002)"
+                                 ],
+                     "namaPadaStrukturDocx":  "BIDANG PENGADAAN, PEMBERHENTIAN DAN INFORMASI",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Bidang Mutasi, Promosi dan Penilaian Kinerja Aparatur",
+                     "jenis":  "bidang",
+                     "induk":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "kode":  "MPP",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "FATWIN SAMPE RANTE, S.Kom (198302152010041001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "BIDANG MUTASI, PROMOSI DAN PENILAIAN KINERJA APARATUR",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Diklat Penjenjangan, Sertifikasi dan Teknis Fungsional",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Pengembangan Aparatur",
+                     "kode":  "PA-02",
+                     "jumlahPegawai":  3,
+                     "pejabat":  [
+                                     "HERI KOLOMBUS REJAUW, SH (197912052010041001)",
+                                     "PENIUS SIEP, S.E. (198804082020121013)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG DIKLAT PENJENJANGAN, SERTIFIKASI DAN TEKNIS FUNGSIONAL",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Pengadaan dan Pemberhentian",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Pengadaan, Pemberhentian dan Informasi",
+                     "kode":  "PPI-01",
+                     "jumlahPegawai":  4,
+                     "pejabat":  [
+                                     "ESIUD SOBOLIM, M.Si (198308122015091001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG PENGADAAN DAN PEMBERHENTIAN",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Kepangkatan",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Mutasi, Promosi dan Penilaian Kinerja Aparatur",
+                     "kode":  "MPP-01",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "YORIM MOMIAKE, SM (198704052011041002)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG KEPANGKATAN",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Data dan Informasi",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Pengadaan, Pemberhentian dan Informasi",
+                     "kode":  "PPI-03",
+                     "jumlahPegawai":  4,
+                     "pejabat":  [
+                                     "THEODORUS VALENTINUS, S.Kom (197908132015091001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG DATA DAN INFORMASI",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bagian Perencanaan dan Keuangan",
+                     "jenis":  "sub_bagian",
+                     "induk":  "Sekretariat",
+                     "kode":  "SEK-PK",
+                     "jumlahPegawai":  4,
+                     "pejabat":  [
+                                     "NOBER KATEMBA, S.Kom (198511252015091001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BAGIAN PERENCANAAN DAN KEUANGAN",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Pengembangan Kompetensi",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Pengembangan Aparatur",
+                     "kode":  "PA-01",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "PENEHAS PAHABOL (197203302003121004)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG PENGEMBANGAN KOMPETENSI",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Fasilitasi dan Profesi ASN",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Pengadaan, Pemberhentian dan Informasi",
+                     "kode":  "PPI-02",
+                     "jumlahPegawai":  3,
+                     "pejabat":  [
+                                     "YONAS MOHI, SE (198208202010011008)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG FASILITASI DAN PROFESI ASN",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Mutasi, Pengembangan Karier dan Promosi",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Mutasi, Promosi dan Penilaian Kinerja Aparatur",
+                     "kode":  "MPP-02",
+                     "jumlahPegawai":  2,
+                     "pejabat":  [
+                                     "HANCE SOBOLIM, S.STP (199405132017081002)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG MUTASI, PENGEMBANGAN KARIER DAN PROMOSI.",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bagian Umum dan Kepegawaian",
+                     "jenis":  "sub_bagian",
+                     "induk":  "Sekretariat",
+                     "kode":  "SEK-UK",
+                     "jumlahPegawai":  4,
+                     "pejabat":  [
+                                     "WELPINUS ITLAY, S.IAN., M.Si. (198807212020121010)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BAGIAN UMUM DAN KEPEGAWAIAN",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Sub Bidang Penilaian Kinerja Aparatur, Disiplin dan Penghargaan",
+                     "jenis":  "sub_bidang",
+                     "induk":  "Bidang Mutasi, Promosi dan Penilaian Kinerja Aparatur",
+                     "kode":  "MPP-03",
+                     "jumlahPegawai":  1,
+                     "pejabat":  [
+                                     "TINUS BAHABOL, S.Pd. (198704062015091001)"
+                                 ],
+                     "namaPadaStrukturDocx":  "SUB BIDANG PENILAIAN KINERJA APARATUR",
+                     "selisihNama":  true,
+                     "skorKemiripan":  0.714
+                 },
+                 {
+                     "nama":  "Kelompok Jabatan Fungsional",
+                     "jenis":  "kelompok_fungsional",
+                     "induk":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "kode":  "FUNGS",
+                     "jumlahPegawai":  2,
+                     "pejabat":  [
+
+                                 ],
+                     "namaPadaStrukturDocx":  "KELOMPOK JABATAN FUNGSIONAL",
+                     "selisihNama":  false
+                 },
+                 {
+                     "nama":  "Bidang Pengembangan Aparatur",
+                     "jenis":  "bidang",
+                     "induk":  "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo",
+                     "kode":  "PA",
+                     "jumlahPegawai":  0,
+                     "pejabat":  [
+
+                                 ],
+                     "namaPadaStrukturDocx":  "BIDANG PENGEMBANGAN APARATUR",
+                     "selisihNama":  false
+                 }
+             ]
+}

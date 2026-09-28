@@ -1,0 +1,681 @@
+# SekreDinas
+
+---
+
+## 1. Ringkasan & Tujuan Aplikasi
+*Bagian ini menjelaskan gambaran umum proyek agar dipahami bersama oleh pemilik ide/klien dan tim pengembang.*
+
+- **Nama Aplikasi**: SekreDinas — Sistem Manajemen Persuratan & Administrasi Sekretariat Dinas Terpadu
+- **Penjelasan Singkat**: SekreDinas adalah platform digital terintegrasi yang mengubah alur kerja sekretariat dinas pemerintah daerah dari tumpukan kertas dan buku agenda manual menjadi sistem persuratan, disposisi, arsip, dan administrasi kepegawaian yang cepat, aman, dan tertelusuri (traceable).
+- **Masalah yang Diselesaikan**:
+  - Pencatatan surat masuk dan surat keluar masih manual memakai buku agenda sehingga rawan hilang, duplikat, dan sulit dicari kembali.
+  - Proses disposisi pimpinan lambat karena harus bertemu langsung atau menitipkan berkas fisik antarlantai.
+  - Arsip surat menumpuk di lemari, tidak ada backup digital, dan mudah rusak/terkena air atau rayap.
+  - Sulit memantau status tindak lanjut sebuah surat (sudah dibaca siapa, sedang diproses siapa, selesai kapan).
+  - Laporan bulanan jumlah surat, agenda kegiatan, dan inventaris aset harus direkap ulang secara manual.
+  - Informasi internal (pengumuman dinas, cuti pegawai, agenda rapat) tersebar di grup WhatsApp tidak resmi.
+- **Pengguna Aplikasi**:
+  - **Admin Sekretariat**: Mengelola seluruh data surat, arsip, agenda, kepegawaian, pengumuman, dan inventaris dinas.
+  - **Pimpinan (Kepala Dinas/Sekretaris)**: Menerima disposisi, memberikan instruksi, menyetujui surat keluar dan pengajuan cuti.
+  - **Pegawai (Staf Bidang)**: Melihat surat masuk yang didisposisikan kepadanya, membuat draf surat keluar, mengajukan cuti, dan melihat pengumuman internal.
+  - **Masyarakat/Publik**: Mengakses informasi layanan, berita kegiatan, dan pengumuman publik dinas tanpa perlu login.
+- **Target Keberhasilan**:
+  - Waktu rata-rata registrasi surat masuk turun dari 10 menit menjadi di bawah 2 menit.
+  - 100% surat masuk tahun berjalan tersimpan sebagai arsip digital (PDF) dengan backup aman.
+  - Waktu disposisi dari pimpinan ke staf turun dari rata-rata 1 hari menjadi di bawah 30 menit.
+  - Nol kejadian surat hilang atau salah tempat setelah 3 bulan pemakaian.
+  - Laporan bulanan otomatis dapat diunduh (Excel/PDF) dalam sekali klik oleh Kepala Dinas.
+
+---
+
+## 2. Batasan Pembuatan Sistem (Versi Awal MVP)
+*Menegaskan fitur apa yang dikerjakan di versi awal dan apa yang sengaja ditunda agar aplikasi cepat selesai dan tidak membengkak (mencegah scope creep).*
+
+### ✅ Yang Dikerjakan:
+- Autentikasi multi-role (Admin, Pimpinan, Pegawai) dengan email institusi.
+- Manajemen Surat Masuk (registrasi, unggah scan PDF, tracking status, pencarian).
+- Manajemen Surat Keluar (draf, nomor surat otomatis, approval pimpinan, kirim).
+- Disposisi berantai (pimpinan → staf, bisa diteruskan ke staf lain) dengan catatan & tenggat waktu.
+- Arsip digital dengan struktur folder kategori + pencarian teks.
+- Agenda kegiatan internal (kalender bulanan).
+- Kepegawaian ringan: profil pegawai, pengajuan cuti, dan persetujuan cuti.
+- Pengumuman internal (dan opsi publish ke halaman publik).
+- Inventaris aset dasar (kode aset, kondisi, lokasi, penanggung jawab).
+- Dashboard statistik surat & laporan unduh (PDF/Excel).
+- Notifikasi dalam aplikasi (bell notification) + WhatsApp opsional.
+- Halaman publik ringkas: beranda dinas, layanan, berita/kegiatan, pengumuman publik, kontak.
+
+### ⛔ Yang Tidak Dikerjakan di Versi Awal:
+- Tanda tangan digital tersertifikasi BSrE/PSrE (baru akan dilakukan di fase 2 produk).
+- Integrasi SRIKANDI / e-Office nasional.
+- Modul keuangan/SPJ lengkap (hanya rekap sederhana di masa depan).
+- Absensi GPS/fingerprint.
+- Mobile app native (Android/iOS) — hanya web responsif.
+- Multi-OPD (multi-dinas dalam satu instance) — rilis pertama single dinas.
+
+---
+
+## 3. Daftar Halaman & Struktur Menu (Pages & Routing)
+*Daftar lengkap halaman yang harus dibuat, dikelompokkan berdasarkan area atau peran pengguna (Role).*
+
+### A. Public Area (Tanpa Login)
+- `/` (Beranda Dinas): Hero sambutan Kepala Dinas, layanan unggulan, berita terbaru, pengumuman publik, kontak cepat.
+- `/tentang` (Tentang Kami): Sejarah, visi misi, struktur organisasi, tugas & fungsi sekretariat.
+- `/layanan` (Layanan Publik): Daftar layanan dinas beserta syarat & alur pengajuan (informasi, bukan pengajuan online di MVP).
+- `/berita` (Berita & Kegiatan): Daftar berita dinas dengan filter kategori dan pencarian.
+- `/berita/[slug]` (Detail Berita): Isi lengkap berita + berita terkait.
+- `/pengumuman` (Pengumuman Publik): Daftar pengumuman yang ditandai publik.
+- `/kontak` (Kontak & Peta): Alamat kantor, peta lokasi (embed), telepon, email, form pesan (opsional).
+- `/login` (Login Pegawai): Form login email institusi + password.
+- `/lupa-password` (Reset Password): Kirim tautan reset via email.
+
+### B. Pegawai / User Area (Setelah Login)
+- `/dashboard` (Dasbor Pegawai): Ringkasan surat terbaru untuk saya, disposisi pending, agenda hari ini, pengumuman baru.
+- `/dashboard/surat-masuk` (Daftar Surat Masuk): Tabel dengan filter status, sifat, kategori, tanggal, dan searchbar.
+- `/dashboard/surat-masuk/baru` (Registrasi Surat Masuk): Form registrasi + unggah scan PDF.
+- `/dashboard/surat-masuk/[id]` (Detail Surat Masuk): Preview PDF, riwayat disposisi, tombol "Disposisikan".
+- `/dashboard/surat-keluar` (Daftar Surat Keluar): Tabel surat keluar saya, status draf/menunggu approval/terkirim.
+- `/dashboard/surat-keluar/baru` (Buat Surat Keluar): Form dengan auto-nomor surat, unggah lampiran, pilih penandatangan.
+- `/dashboard/surat-keluar/[id]` (Detail Surat Keluar): Preview, timeline approval, aksi kirim/arsip.
+- `/dashboard/disposisi` (Disposisi Saya): Daftar disposisi masuk ke saya (tab: Menunggu, Diproses, Selesai).
+- `/dashboard/disposisi/[id]` (Detail Disposisi): Instruksi pimpinan, catatan tindak lanjut, tombol "Tandai Selesai".
+- `/dashboard/arsip` (Arsip Digital): Grid/list arsip dengan folder kategori & tag, preview & unduh.
+- `/dashboard/agenda` (Agenda Saya): Kalender bulanan + list agenda yang melibatkan saya.
+- `/dashboard/pengumuman` (Pengumuman Internal): Daftar pengumuman dengan prioritas & lampiran.
+- `/dashboard/cuti` (Pengajuan Cuti): Form pengajuan, riwayat cuti, dan status persetujuan.
+- `/dashboard/profil` (Profil Saya): Edit nama, telepon, foto, ganti password.
+
+### C. Pimpinan Area (Setelah Login dengan Role Pimpinan)
+- `/dashboard` (Dasbor Pimpinan): Sama dengan dasbor pegawai, plus kartu khusus "Menunggu Tindakan Saya".
+- `/dashboard/persetujuan/surat` (Persetujuan Surat Keluar): Daftar surat menunggu tanda tangan/approval.
+- `/dashboard/persetujuan/cuti` (Persetujuan Cuti): Daftar pengajuan cuti pegawai.
+- `/dashboard/disposisi/keluar` (Disposisi yang Saya Kirim): Pantau tindak lanjut disposisi yang pernah dikirim.
+
+### D. Admin Area (Setelah Login dengan Role Admin)
+- `/admin/dashboard` (Dasbor Admin): Statistik global — jumlah surat masuk/keluar bulan ini, disposisi open, pegawai aktif, dsb.
+- `/admin/pengguna` (Kelola Pengguna): CRUD akun pegawai, reset password, aktif/non-aktif.
+- `/admin/bidang` (Kelola Bidang): CRUD bidang/departemen.
+- `/admin/kategori-surat` (Kategori Surat): CRUD kategori surat beserta kode.
+- `/admin/surat-masuk` (Kelola Surat Masuk): Edit, hapus, ubah status, tampilkan seluruh surat dinas.
+- `/admin/surat-keluar` (Kelola Surat Keluar): Edit, atur penomoran, atur penandatangan, arsipkan.
+- `/admin/arsip` (Kelola Arsip): CRUD arsip, manajemen folder, tag.
+- `/admin/agenda` (Kelola Agenda): CRUD agenda kegiatan dinas.
+- `/admin/pengumuman` (Kelola Pengumuman): CRUD pengumuman, atur publik/internal, atur jadwal tayang.
+- `/admin/inventaris` (Inventaris Aset): CRUD aset dinas.
+- `/admin/laporan` (Laporan & Statistik): Rekap surat, disposisi, cuti, aset; unduh PDF/Excel.
+- `/admin/pengaturan` (Pengaturan Sistem): Format nomor surat, identitas instansi, logo, kop surat, integrasi WA.
+
+---
+
+## 4. Pedoman UI/UX & Design System
+*Panduan visual konkret agar AI coding assistant tidak membuat UI yang kaku atau default.*
+
+- **Skema Warna**:
+  - Primary (Navy Pemerintahan): `HSL(218, 68%, 22%)` — warna utama header, tombol primary, sidebar.
+  - Primary-Hover: `HSL(218, 68%, 16%)`
+  - Secondary (Emas Dinas): `HSL(42, 92%, 55%)` — aksen badge, highlight, garis divider, tombol sekunder.
+  - Accent (Teal Informasi): `HSL(190, 85%, 42%)` — status info, tautan.
+  - Success: `HSL(142, 71%, 45%)` — status disetujui/selesai.
+  - Warning: `HSL(38, 92%, 50%)` — status menunggu/diproses.
+  - Destructive: `HSL(0, 72%, 51%)` — hapus/tolak.
+  - Background: `HSL(210, 40%, 98%)` (abu sangat muda lembut, bukan putih pucat).
+  - Foreground: `HSL(222, 47%, 11%)`.
+  - Border: `HSL(214, 32%, 91%)`.
+  - Muted: `HSL(210, 40%, 96%)`.
+- **Tipografi**:
+  - Heading: **"Plus Jakarta Sans"** (bold 700-800) — terasa modern & Indonesia-native.
+  - Body: **"Inter"** (regular 400 / medium 500) — sangat mudah dibaca di tabel panjang.
+  - Monospace (untuk nomor surat / NIP): **"JetBrains Mono"**.
+  - Skala: `text-xs 12px`, `text-sm 14px`, `text-base 16px`, `text-lg 18px`, `text-xl 20px`, `text-2xl 24px`, `text-3xl 30px`, `text-4xl 36px`.
+- **Aturan Komponen**:
+  - Sudut membulat: `rounded-lg` (8px) untuk input & tombol; `rounded-xl` (12px) untuk kartu; `rounded-2xl` (16px) untuk kartu hero/modul utama.
+  - Shadow: `shadow-sm` untuk kartu biasa, `shadow-md` saat hover kartu berita, `shadow-lg` untuk modal & dropdown.
+  - Spasi grid: gunakan `gap-4` untuk grid rapat, `gap-6` untuk grid kartu, `p-6` untuk padding kartu standar.
+  - Tabel data wajib: header sticky, zebra row (`even:bg-muted/40`), kolom aksi paling kanan, pagination di bawah (10/25/50 per halaman).
+  - State wajib ada untuk setiap tabel/list: **Loading (skeleton)**, **Empty State (ilustrasi + CTA)**, **Error State**.
+  - Sidebar admin/pegawai: lebar 260px, item aktif menggunakan `bg-primary/10 text-primary font-medium border-l-4 border-secondary`.
+- **Nuansa & Vibe**:
+  - **Formal, terpercaya, dan bersih** — layaknya portal pemerintah modern (seperti Indonesia.go.id), bukan startup.
+  - Banyak whitespace, tipografi tegas, ikon garis tipis (Lucide) ukuran 18px.
+  - Micro-animation halus: fade-in pada kartu (150ms), transisi hover tombol (200ms), animasi slide-in untuk drawer di mobile.
+  - Skema gelap/terang (dark mode) opsional disertakan mulai versi awal.
+  - **Aksesibilitas**: kontras minimum WCAG AA, semua tombol punya `aria-label`, navigasi keyboard penuh.
+
+---
+
+## 5. Pembagian Hak Akses Pengguna
+*Tabel hak akses yang menentukan siapa saja yang boleh melihat, mengedit, atau mengelola data.*
+
+| Menu / Halaman | Publik (Tanpa Login) | Pegawai (Login) | Pimpinan (Login) | Admin (Login) |
+| :--- | :---: | :---: | :---: | :---: |
+| Beranda, Tentang, Layanan, Berita, Pengumuman Publik, Kontak | ✅ | ✅ | ✅ | ✅ |
+| Login / Lupa Password | ✅ | ✅ | ✅ | ✅ |
+| Dashboard Pribadi | ❌ | ✅ | ✅ | ✅ |
+| Surat Masuk (Lihat & Registrasi) | ❌ | ✅ | ✅ | ✅ |
+| Surat Masuk (Edit / Hapus semua) | ❌ | ❌ | ❌ | ✅ |
+| Disposisi (Buat / Teruskan) | ❌ | ❌ | ✅ | ✅ |
+| Disposisi (Lihat milik sendiri & Update Status) | ❌ | ✅ | ✅ | ✅ |
+| Surat Keluar (Buat Draf) | ❌ | ✅ | ✅ | ✅ |
+| Surat Keluar (Approval / Tanda Tangan) | ❌ | ❌ | ✅ | ✅ |
+| Arsip Digital (Lihat & Unduh) | ❌ | ✅ | ✅ | ✅ |
+| Arsip Digital (Unggah / Hapus) | ❌ | ❌ | ❌ | ✅ |
+| Agenda (Lihat) | ❌ | ✅ | ✅ | ✅ |
+| Agenda (Kelola / CRUD) | ❌ | ❌ | ❌ | ✅ |
+| Pengumuman Internal (Lihat) | ❌ | ✅ | ✅ | ✅ |
+| Pengumuman (Kelola / Publikasikan) | ❌ | ❌ | ❌ | ✅ |
+| Cuti (Ajukan & Lihat Milik Sendiri) | ❌ | ✅ | ✅ | ✅ |
+| Cuti (Setujui / Tolak) | ❌ | ❌ | ✅ | ✅ |
+| Inventaris Aset (Lihat) | ❌ | ✅ | ✅ | ✅ |
+| Inventaris Aset (CRUD) | ❌ | ❌ | ❌ | ✅ |
+| Kelola Pengguna, Bidang, Kategori Surat | ❌ | ❌ | ❌ | ✅ |
+| Laporan & Statistik | ❌ | ❌ | ✅ | ✅ |
+| Pengaturan Sistem | ❌ | ❌ | ❌ | ✅ |
+
+---
+
+## 6. Alur Kerja dan Fitur Utama
+*Menjelaskan cara kerja setiap fitur utama dalam bahasa yang mudah dipahami serta aturan logikanya.*
+
+### A. Modul Autentikasi & Manajemen Akun
+1. **Cara Kerja**: Pegawai masuk ke `/login`, memasukkan email dinas (`nama@sekredinas.go.id`) dan password. Jika lupa password, klik "Lupa Password" → tautan reset dikirim ke email. Admin membuat akun pegawai baru melalui `/admin/pengguna`; pegawai akan menerima email undangan untuk membuat password.
+2. **Aturan Sistem**:
+   - Password minimal 8 karakter, wajib kombinasi huruf besar, huruf kecil, dan angka.
+   - Sesi login berlaku 8 jam, auto-logout jika idle > 30 menit.
+   - Akun non-aktif (kolom `profiles.aktif = false`) tidak dapat login sama sekali.
+   - Hanya email berdomain resmi dinas yang diterima (validasi domain di server).
+
+### B. Modul Surat Masuk
+1. **Cara Kerja**: Pegawai/Admin membuka `/dashboard/surat-masuk/baru`, mengisi form (asal surat, perihal, tanggal surat, tanggal terima, sifat, kategori) dan mengunggah scan PDF. Sistem menghasilkan **Nomor Agenda otomatis** (format: `SM-{YEAR}-{URUT}`). Surat langsung tampil di daftar surat masuk dengan status awal "Terkirim". Pimpinan bisa membuka detail dan langsung mengirim disposisi.
+2. **Aturan Sistem**:
+   - Ukuran file maksimal 10 MB, format `.pdf` saja (diproses di server).
+   - Nomor agenda otomatis unik, direset setiap tahun, format konsisten dari pengaturan sistem.
+   - Kolom wajib: asal surat, perihal, tanggal surat, tanggal terima, file scan.
+   - Surat dengan sifat "Rahasia" hanya terlihat oleh Admin dan Pimpinan, dan tidak muncul di hasil pencarian untuk pegawai biasa.
+   - Setiap perubahan status dicatat di tabel audit log (siapa, kapan, status sebelum → sesudah).
+
+### C. Modul Surat Keluar
+1. **Cara Kerja**: Pegawai membuka `/dashboard/surat-keluar/baru` → isi tujuan, perihal, kategori, isi surat, dan pilih penandatangan. Nomor surat di-generate otomatis (`{KODE_KATEGORI}/{URUT}/{KODE_BIDANG}/{BULAN_ROMAWI}/{YEAR}`). Setelah dikirim, status berubah menjadi "Menunggu Approval". Pimpinan melihat di `/dashboard/persetujuan/surat`, dapat menyetujui (status → "Terkirim") atau mengembalikan dengan catatan.
+2. **Aturan Sistem**:
+   - Nomor surat tidak boleh duplikat (unique constraint di database).
+   - Setiap tahun penomoran reset. Format nomor bisa dikonfigurasi di `/admin/pengaturan`.
+   - Surat yang sudah "Terkirim"/"Arsip" tidak dapat diedit lagi (immutable setelah approved).
+   - Setiap surat keluar wajib punya minimal 1 penandatangan dari role Pimpinan.
+
+### D. Modul Disposisi
+1. **Cara Kerja**: Pimpinan membuka detail surat masuk → klik "Disposisikan" → pilih pegawai/bidang tujuan → tulis instruksi + tenggat waktu. Pegawai penerima melihatnya di `/dashboard/disposisi` dengan badge merah. Setelah menindaklanjuti, pegawai klik "Tandai Selesai" dan mencantumkan catatan tindak lanjut. Pimpinan dapat memantau status di `/dashboard/disposisi/keluar`.
+2. **Aturan Sistem**:
+   - Satu surat bisa punya banyak disposisi berantai (Pimpinan → Kasi → Staf).
+   - Disposisi hanya boleh dibuat/diteruskan oleh role Pimpinan atau Admin.
+   - Setiap disposisi menyimpan `dari_user_id`, `ke_user_id`, `instruksi`, `batas_waktu`, `status`, `dibaca_pada`, `selesai_pada`.
+   - Sistem menandai disposisi dengan `batas_waktu < hari ini && status != selesai` sebagai **Terlambat** dengan badge merah.
+
+### E. Modul Arsip Digital
+1. **Cara Kerja**: Admin mengunggah berkas di `/dashboard/arsip` (menu tambah) → pilih kategori & tahun → unggah file. Pegawai dapat mencari arsip berdasarkan judul, kategori, tahun, atau tag. Preview langsung di browser (PDF viewer) dan tombol unduh.
+2. **Aturan Sistem**:
+   - Ukuran file maksimal 25 MB per berkas.
+   - Format yang diterima: `.pdf`, `.docx`, `.xlsx`, `.jpg`, `.png`.
+   - Metadata wajib: judul, kategori, tahun, file.
+   - Tag bersifat free-text dipisah koma, disimpan sebagai string (di masa depan bisa dinormalisasi).
+   - Akses unduh dicatat untuk audit (opsional di MVP).
+
+### F. Modul Agenda Kegiatan
+1. **Cara Kerja**: Admin membuat agenda di `/admin/agenda` → pegawai melihat di `/dashboard/agenda` sebagai kalender bulanan (default view) + list harian. Pegawai yang diundang dapat menandai "hadir" (opsional).
+2. **Aturan Sistem**:
+   - Waktu mulai wajib, waktu selesai opsional.
+   - Validasi: `selesai > mulai`.
+   - Agenda internal hanya terlihat pegawai login. Agenda publik (jika ada) tersimpan dengan flag `publik = true`.
+
+### G. Modul Kepegawaian & Cuti
+1. **Cara Kerja**: Pegawai mengajukan cuti lewat `/dashboard/cuti` (pilih jenis cuti, tanggal, alasan, lampiran opsional). Pimpinan melihat di `/dashboard/persetujuan/cuti` dan menyetujui/menolak dengan catatan.
+2. **Aturan Sistem**:
+   - Sisa kuota cuti tahunan (default 12 hari) dikurangi saat status cuti "Disetujui".
+   - Tidak boleh mengajukan cuti di tanggal yang bentrok dengan cuti lain yang sudah disetujui (untuk pegawai yang sama).
+   - Lampiran wajib untuk cuti sakit > 2 hari.
+
+### H. Modul Pengumuman Internal
+1. **Cara Kerja**: Admin membuat pengumuman di `/admin/pengumuman` → pilih prioritas + jadwal tayang → tandai publik (tampil di `/pengumuman`) atau internal saja.
+2. **Aturan Sistem**:
+   - Pengumuman otomatis hilang dari tampilan jika `tanggal_berakhir < hari ini`.
+   - Prioritas "Segera"/"Rahasia" menampilkan warna badge berbeda.
+   - Pengumuman internal tidak boleh diakses tanpa login (middleware proteksi rute).
+
+### I. Modul Inventaris Aset
+1. **Cara Kerja**: Admin input aset di `/admin/inventaris` (kode aset auto-generate, merek, tahun, jumlah, kondisi, lokasi, penanggung jawab). Pegawai dapat melihat daftar aset publik-nya.
+2. **Aturan Sistem**:
+   - `kode_aset` unik dan otomatis (format: `INV-{KATEGORI}-{URUT}`).
+   - Kondisi: `baik`, `rusak_ringan`, `rusak_berat`.
+   - Nilai aset disimpan sebagai integer (rupiah, tanpa desimal).
+
+### J. Modul Notifikasi & Laporan
+1. **Cara Kerja**: Setiap event penting (surat baru didisposisikan, surat menunggu approval, cuti disetujui) memicu notifikasi masuk ke bel di header. Notifikasi juga opsional dikirim via WhatsApp (Fonnte/Wablas). Admin/Kepala dapat mengunduh laporan bulanan via `/admin/laporan` (format PDF & Excel).
+2. **Aturan Sistem**:
+   - Notifikasi dalam aplikasi wajib untuk semua event penting.
+   - WhatsApp opsional dan membutuhkan env `WA_API_KEY`.
+   - Laporan menghitung agregat real-time dari database (tanpa cache).
+
+---
+
+## 7. Alur Navigasi & Arsitektur Layout
+*Peta navigasi alur halaman dan struktur tata letak (layout).*
+
+### Arsitektur Layout (Persisten)
+- **Public Layout** (`app/(public)/layout.tsx`): Header Navbar statis di atas (logo + menu Beranda, Tentang, Layanan, Berita, Pengumuman, Kontak, tombol Login) dan Footer berisi identitas instansi + sosial + tautan penting.
+- **Auth Layout** (`app/(auth)/layout.tsx`): Split-screen — panel kiri warna hijau-navy institusional dengan logo & tagline, panel kanan form login.
+- **Dashboard Layout** (`app/(dashboard)/layout.tsx`): Sidebar kiri fix (260px) berisi menu role-based, Header kecil di atas (breadcrumb + search + bell notifikasi + avatar dropdown), konten scrollable.
+- **Admin Layout** (`app/admin/layout.tsx`): Sama seperti dashboard, hanya berbeda menu sidebar (semua menu admin).
+- **Mobile**: Sidebar berubah menjadi drawer (slide-in dari kiri) dengan overlay; tombol hamburger di header.
+
+### Bagan Alur (Flowchart)
+```mermaid
+flowchart TD
+    A[Pengunjung] --> B[Halaman Publik /]
+    B --> C{Klik Login?}
+    C -- Tidak --> B
+    C -- Ya --> D[/login]
+    D --> E{Autentikasi}
+    E -- Gagal --> D
+    E -- Sukses --> F{Cek Role}
+    F -- Pegawai --> G[Dashboard Pegawai]
+    F -- Pimpinan --> H[Dashboard Pimpinan]
+    F -- Admin --> I[Dashboard Admin]
+
+    G --> G1[Surat Masuk - Lihat & Registrasi]
+    G --> G2[Surat Keluar - Buat Draf]
+    G --> G3[Disposisi - Lihat & Update]
+    G --> G4[Arsip - Lihat & Unduh]
+    G --> G5[Cuti - Ajukan]
+
+    H --> H1[Persetujuan Surat Keluar]
+    H --> H2[Persetujuan Cuti]
+    H --> H3[Buat Disposisi]
+    H --> H4[Pantau Disposisi Keluar]
+
+    I --> I1[Kelola Pengguna & Bidang]
+    I --> I2[Kelola Surat Masuk/Keluar]
+    I --> I3[Kelola Arsip & Kategori]
+    I --> I4[Kelola Agenda & Pengumuman]
+    I --> I5[Kelola Inventaris Aset]
+    I --> I6[Laporan & Statistik]
+
+    G2 -->|Kirim untuk approval| H1
+    H3 -->|Notifikasi| G3
+    G3 -->|Tandai Selesai| H4
+    G5 -->|Menunggu persetujuan| H2
+    H1 -->|Setujui| AZ[Status Terkirim & Diarsipkan]
+    H2 -->|Setujui| CUT[Kuota Cuti Berkurang]
+```
+
+---
+
+## 8. Kebutuhan Non-Fungsional (SEO, Keamanan, & Performa)
+*Syarat wajib agar website siap rilis ke publik (production-ready).*
+
+- **SEO**: Wajib menggunakan tag `<title>` dinamis, meta description, dan Open Graph (OG) tags di setiap halaman publik (`/`, `/tentang`, `/layanan`, `/berita`, `/berita/[slug]`, `/pengumuman`, `/kontak`). Tambahkan `sitemap.xml` & `robots.txt`. Halaman dashboard & admin wajib `noindex, nofollow`.
+- **Keamanan**:
+  - Wajib implementasi proteksi CSRF pada seluruh form mutate state.
+  - Sanitasi input untuk mencegah XSS (semua rich-text di-render lewat sanitizer seperti `sanitize-html`).
+  - Validasi sisi server (Server Actions + Zod schema) untuk semua payload.
+  - Row Level Security (RLS) aktif di PostgreSQL untuk tabel `profiles`, `surat_masuk`, `surat_keluar`, `disposisi`, `cuti`, `arsip`, `inventaris`.
+  - Rate-limiting login (maksimum 5 percobaan gagal per 10 menit per IP).
+  - Sesi menggunakan httpOnly cookie, secure, dan sameSite=lax.
+  - File yang diunggah dipindai tipe mime-nya (bukan hanya ekstensi) sebelum disimpan.
+  - Log aksi admin (audit log) untuk perubahan & penghapusan data penting.
+- **Performa**:
+  - Wajib optimasi gambar (`<Image>` Next.js), lazy loading komponen berat (chart, PDF viewer).
+  - Caching untuk data publik (berita, pengumuman publik, layanan) dengan `revalidateTag` Next.js.
+  - Query tabel memakai pagination server-side (bukan `SELECT *` semua).
+  - Target Lighthouse: Performance ≥ 85, Accessibility ≥ 90, Best Practices ≥ 90, SEO ≥ 95.
+
+---
+
+## 9. Panduan Bahasa, Copywriting, & Data Dummy
+*Panduan nada bicara (Tone of Voice) dan contoh data agar prototipe terasa nyata.*
+
+- **Gaya Bahasa**: Profesional, ramah, dan membumi (menggunakan kata "Anda" dan "Kami"), sesuai kaidah PUEBI. Hindari bahasa alay atau informal. Contoh microcopy tombol: **"Simpan Surat"**, **"Disposisikan"**, **"Tandai Selesai"**, **"Menunggu Persetujuan"**, **"Disetujui"**, **"Perlu Tindak Lanjut"**.
+- **Instruksi Data Dummy**: JANGAN PERNAH MENGGUNAKAN "Lorem Ipsum". Selalu gunakan data dummy berbahasa Indonesia yang relevan dengan konteks aplikasi. Contoh spesifik:
+  - **Pegawai**: `Budi Santoso, S.E.` (NIP `197805122005011002`, Jabatan `Sekretaris Dinas`, Bidang `Sekretariat`), `Siti Aminah, S.Kom.` (Jabatan `Kasubbag Kepegawaian`), `Ahmad Fauzi, S.Sos.` (Jabatan `Kepala Dinas`, role `pimpinan`).
+  - **Bidang**: `Sekretariat`, `Bidang Pelayanan`, `Bidang Pengelolaan Informasi`, `Bidang Sarana & Prasarana`.
+  - **Surat Masuk**: `005/1234/DISDIK/2025` dari **"Dinas Pendidikan Kabupaten Sleman"** perihal **"Undangan Rapat Koordinasi Program Kerja Tahun 2026"**, tanggal surat `12 November 2025`.
+  - **Surat Keluar**: Nomor `421/045/SEKRE/V/2025`, tujuan **"Bupati Sleman"**, perihal **"Laporan Kinerja Bulanan Maret 2025"**.
+  - **Disposisi**: Instruksi **"Mohon ditindaklanjuti dan dipresentasikan pada rapat Senin depan. Koordinasi dengan Bidang Pelayanan."** dari Kepala Dinas ke Kasubbag.
+  - **Kategori Surat**: `Undangan (U)`, `Permohonan (PM)`, `Pemberitahuan (PB)`, `Surat Tugas (ST)`, `Surat Keputusan (SK)`, `Laporan (L)`.
+  - **Agenda**: `Rapat Koordinasi Bulanan` di `Ruang Rapat Utama`, `Bimbingan Teknis Kepegawaian` di `Aula Dinas`, tanggal realistis dalam 30 hari terakhir & ke depan.
+  - **Pengumuman**: Judul **"Pemutakhiran Data Kepegawaian Triwulan IV 2025"**, isi singkat 2-3 paragraf, prioritas `penting`.
+  - **Inventaris**: Contoh aset `INV-ELK-0001`, `Laptop Lenovo ThinkPad E14`, kategori `Elektronik`, tahun 2023, kondisi `baik`, lokasi `Ruang Sekretariat`, nilai `Rp 12.500.000`.
+
+---
+
+## 10. Fondasi Teknis (Untuk Tim Pengembang / Programmer & AI)
+*Petunjuk arsitektur teknis spesifik.*
+
+- **Bahasa & Framework**: **Next.js 15 (App Router)** dengan **TypeScript 5**, menggunakan **Server Actions** dan **Server Components** untuk baca-tulis data.
+- **Tampilan Antarmuka (UI)**: **Tailwind CSS v4**, **shadcn/ui** (Radix primitives), **Lucide Icons**, **Recharts** untuk grafik, **TanStack Table** untuk tabel data, **react-pdf** atau `<iframe>` untuk preview PDF.
+- **Autentikasi**: **Supabase Auth** (email + password, email invite, reset password via email), dikombinasikan **middleware Next.js** untuk proteksi rute.
+- **Basis Data (Database)**: **Supabase PostgreSQL** dengan **Drizzle ORM** untuk type-safe schema & migration; **Supabase Storage** untuk file surat & arsip (bucket: `surat-masuk`, `surat-keluar`, `arsip`, `lampiran-cuti`, `avatars`).
+- **Form & Validasi**: **React Hook Form** + **Zod** untuk validasi client & server.
+- **Deployment**: **Vercel** (frontend/render) + **Supabase Cloud** (database + storage + auth).
+
+### Struktur Skema Database Nyata
+*(File `db/schema.ts` — siap dipakai dengan Drizzle ORM ke Supabase PostgreSQL)*
+```typescript
+import {
+  pgTable, uuid, varchar, text, timestamp, boolean, integer, date, pgEnum,
+} from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+
+// ENUMS
+export const roleEnum = pgEnum('role', ['admin', 'pimpinan', 'pegawai']);
+export const statusSuratEnum = pgEnum('status_surat', ['draft', 'terkirim', 'dibaca', 'didisposisi', 'selesai', 'arsip']);
+export const prioritasEnum = pgEnum('prioritas', ['biasa', 'penting', 'segera', 'rahasia']);
+export const statusDisposisiEnum = pgEnum('status_disposisi', ['menunggu', 'diproses', 'selesai']);
+export const statusCutiEnum = pgEnum('status_cuti', ['menunggu', 'disetujui', 'ditolak']);
+export const kondisiAsetEnum = pgEnum('kondisi_aset', ['baik', 'rusak_ringan', 'rusak_berat']);
+
+// BIDANG (Departemen)
+export const bidang = pgTable('bidang', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  nama: varchar('nama', { length: 150 }).notNull(),
+  kode: varchar('kode', { length: 20 }).notNull().unique(),
+  deskripsi: text('deskripsi'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// PROFILES (extends auth.users)
+export const profiles = pgTable('profiles', {
+  id: uuid('id').primaryKey(), // 1-1 dengan auth.users.id
+  nip: varchar('nip', { length: 30 }).unique(),
+  namaLengkap: varchar('nama_lengkap', { length: 150 }).notNull(),
+  email: varchar('email', { length: 150 }).notNull().unique(),
+  jabatan: varchar('jabatan', { length: 100 }),
+  role: roleEnum('role').default('pegawai').notNull(),
+  bidangId: uuid('bidang_id').references(() => bidang.id, { onDelete: 'set null' }),
+  telepon: varchar('telepon', { length: 20 }),
+  avatarUrl: text('avatar_url'),
+  sisaCuti: integer('sisa_cuti').default(12).notNull(),
+  aktif: boolean('aktif').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// KATEGORI SURAT
+export const kategoriSurat = pgTable('kategori_surat', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  nama: varchar('nama', { length: 100 }).notNull(),
+  kode: varchar('kode', { length: 10 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// SURAT MASUK
+export const suratMasuk = pgTable('surat_masuk', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  nomorAgenda: varchar('nomor_agenda', { length: 50 }).notNull().unique(),
+  nomorSurat: varchar('nomor_surat', { length: 100 }).notNull(),
+  tanggalSurat: date('tanggal_surat').notNull(),
+  tanggalTerima: date('tanggal_terima').notNull(),
+  asalSurat: varchar('asal_surat', { length: 200 }).notNull(),
+  perihal: text('perihal').notNull(),
+  kategoriId: uuid('kategori_id').references(() => kategoriSurat.id, { onDelete: 'set null' }),
+  sifat: prioritasEnum('sifat').default('biasa').notNull(),
+  fileUrl: text('file_url'),
+  fileName: varchar('file_name', { length: 255 }),
+  status: statusSuratEnum('status').default('terkirim').notNull(),
+  catatan: text('catatan'),
+  createdBy: uuid('created_by').references(() => profiles.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// SURAT KELUAR
+export const suratKeluar = pgTable('surat_keluar', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  nomorSurat: varchar('nomor_surat', { length: 100 }).notNull().unique(),
+  tanggalSurat: date('tanggal_surat').notNull(),
+  tujuan: varchar('tujuan', { length: 200 }).notNull(),
+  perihal: text('perihal').notNull(),
+  kategoriId: uuid('kategori_id').references(() => kategoriSurat.id, { onDelete: 'set null' }),
+  sifat: prioritasEnum('sifat').default('biasa').notNull(),
+  isiSurat: text('isi_surat'),
+  fileUrl: text('file_url'),
+  fileName: varchar('file_name', { length: 255 }),
+  status: statusSuratEnum('status').default('draft').notNull(),
+  penandatanganId: uuid('penandatangan_id').references(() => profiles.id, { onDelete: 'set null' }),
+  approvedBy: uuid('approved_by').references(() => profiles.id, { onDelete: 'set null' }),
+  approvedAt: timestamp('approved_at'),
+  createdBy: uuid('created_by').references(() => profiles.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// DISPOSISI
+export const disposisi = pgTable('disposisi', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  suratMasukId: uuid('surat_masuk_id').references(() => suratMasuk.id, { onDelete: 'cascade' }).notNull(),
+  dariUserId: uuid('dari_user_id').references(() => profiles.id).notNull(),
+  keUserId: uuid('ke_user_id').references(() => profiles.id).notNull(),
+  instruksi: text('instruksi').notNull(),
+  catatan: text('catatan'),
+  batasWaktu: date('batas_waktu'),
+  status: statusDisposisiEnum('status').default('menunggu').notNull(),
+  dibacaPada: timestamp('dibaca_pada'),
+  selesaiPada: timestamp('selesai_pada'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// ARSIP DIGITAL
+export const arsip = pgTable('arsip', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  judul: varchar('judul', { length: 200 }).notNull(),
+  deskripsi: text('deskripsi'),
+  kategori: varchar('kategori', { length: 100 }),
+  tahun: integer('tahun'),
+  fileUrl: text('file_url').notNull(),
+  fileName: varchar('file_name', { length: 255 }).notNull(),
+  fileSize: integer('file_size'),
+  fileType: varchar('file_type', { length: 50 }),
+  tags: text('tags'),
+  uploadedBy: uuid('uploaded_by').references(() => profiles.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// AGENDA
+export const agenda = pgTable('agenda', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  judul: varchar('judul', { length: 200 }).notNull(),
+  deskripsi: text('deskripsi'),
+  lokasi: varchar('lokasi', { length: 200 }),
+  mulai: timestamp('mulai').notNull(),
+  selesai: timestamp('selesai'),
+  jenis: varchar('jenis', { length: 50 }),
+  publik: boolean('publik').default(false).notNull(),
+  penanggungJawabId: uuid('penanggung_jawab_id').references(() => profiles.id, { onDelete: 'set null' }),
+  createdBy: uuid('created_by').references(() => profiles.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// PENGUMUMAN
+export const pengumuman = pgTable('pengumuman', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  judul: varchar('judul', { length: 200 }).notNull(),
+  isi: text('isi').notNull(),
+  prioritas: prioritasEnum('prioritas').default('biasa').notNull(),
+  lampiranUrl: text('lampiran_url'),
+  publik: boolean('publik').default(false).notNull(),
+  tanggalMulai: timestamp('tanggal_mulai').defaultNow().notNull(),
+  tanggalBerakhir: timestamp('tanggal_berakhir'),
+  createdBy: uuid('created_by').references(() => profiles.id).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// CUTI
+export const cuti = pgTable('cuti', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  pegawaiId: uuid('pegawai_id').references(() => profiles.id).notNull(),
+  jenisCuti: varchar('jenis_cuti', { length: 50 }).notNull(),
+  tanggalMulai: date('tanggal_mulai').notNull(),
+  tanggalSelesai: date('tanggal_selesai').notNull(),
+  totalHari: integer('total_hari').notNull(),
+  alasan: text('alasan').notNull(),
+  lampiranUrl: text('lampiran_url'),
+  status: statusCutiEnum('status').default('menunggu').notNull(),
+  approvedBy: uuid('approved_by').references(() => profiles.id, { onDelete: 'set null' }),
+  catatanPersetujuan: text('catatan_persetujuan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// INVENTARIS ASET
+export const inventaris = pgTable('inventaris', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  kodeAset: varchar('kode_aset', { length: 50 }).notNull().unique(),
+  namaAset: varchar('nama_aset', { length: 200 }).notNull(),
+  kategori: varchar('kategori', { length: 100 }),
+  merek: varchar('merek', { length: 100 }),
+  tahunPerolehan: integer('tahun_perolehan'),
+  jumlah: integer('jumlah').default(1).notNull(),
+  satuan: varchar('satuan', { length: 20 }).default('unit'),
+  kondisi: kondisiAsetEnum('kondisi').default('baik').notNull(),
+  lokasi: varchar('lokasi', { length: 200 }),
+  nilaiPerolehan: integer('nilai_perolehan'),
+  penanggungJawabId: uuid('penanggung_jawab_id').references(() => profiles.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// NOTIFIKASI INTERNAL
+export const notifikasi = pgTable('notifikasi', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => profiles.id, { onDelete: 'cascade' }).notNull(),
+  judul: varchar('judul', { length: 200 }).notNull(),
+  pesan: text('pesan').notNull(),
+  tipe: varchar('tipe', { length: 50 }),
+  link: text('link'),
+  dibaca: boolean('dibaca').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// AUDIT LOG
+export const auditLog = pgTable('audit_log', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').references(() => profiles.id, { onDelete: 'set null' }),
+  aksi: varchar('aksi', { length: 50 }).notNull(),
+  entitas: varchar('entitas', { length: 50 }).notNull(),
+  entitasId: uuid('entitas_id'),
+  perubahan: text('perubahan'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// RELATIONS (contoh utama)
+export const profilesRelations = relations(profiles, ({ one, many }) => ({
+  bidang: one(bidang, { fields: [profiles.bidangId], references: [bidang.id] }),
+  disposisiDikirim: many(disposisi, { relationName: 'dariUser' }),
+  disposisiDiterima: many(disposisi, { relationName: 'keUser' }),
+}));
+
+export const suratMasukRelations = relations(suratMasuk, ({ one, many }) => ({
+  kategori: one(kategoriSurat, { fields: [suratMasuk.kategoriId], references: [kategoriSurat.id] }),
+  pembuat: one(profiles, { fields: [suratMasuk.createdBy], references: [profiles.id] }),
+  disposisi: many(disposisi),
+}));
+```
+
+### Variabel Lingkungan (`.env.example`)
+```env
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=SekreDinas
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+DATABASE_URL=postgresql://postgres:password@db.xxxx.supabase.co:5432/postgres
+
+# Storage Buckets
+SUPABASE_BUCKET_SURAT=surat-masuk
+SUPABASE_BUCKET_ARSIP=arsip
+SUPABASE_BUCKET_LAMPIRAN=lampiran-cuti
+SUPABASE_BUCKET_AVATAR=avatars
+
+# WhatsApp Gateway (opsional)
+WA_PROVIDER=fonnte
+WA_API_URL=https://api.fonnte.com/send
+WA_API_KEY=xxxxxxxxxxxxxx
+WA_SENDER_NUMBER=6281234567890
+
+# Email (reset password & invite)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=sekredinas@dinaskab.go.id
+SMTP_PASSWORD=app-password
+SMTP_FROM="SekreDinas <noreply@sekredinas.go.id>"
+
+# Keamanan
+SESSION_SECRET=random-string-64-chars
+RATE_LIMIT_MAX_LOGIN=5
+```
+
+---
+
+## 11. Tahapan Pengerjaan & Task Breakdown (Actionable Work Breakdown Structure)
+*Daftar tugas terstruktur dan terurut (Atomic Tasks) dengan format checklist markdown `- [ ] **Task X.Y**`. Dirancang khusus agar pengguna dapat menginstruksikan AI Coding Assistant (Antigravity, Cursor, Claude Code, Roo Code, dll.) untuk mengeksekusi proyek langkah demi langkah secara terukur, modular, dan bebas dari kehabisan context window.*
+
+### Tahap 1: Fondasi Proyek, UI/UX, & Semua Halaman (Dummy Data)
+*Tujuan: Membangun seluruh antarmuka visual secara 100% lengkap dan responsif menggunakan data dummy sebelum menyentuh database.*
+
+- [ ] **Task 1.1 (Foundations & Design System)**: Inisialisasi proyek Next.js 15 + TypeScript + Tailwind CSS v4 + shadcn/ui. Setup CSS variable token warna (Primary Navy `218 68% 22%`, Secondary Gold `42 92% 55%`, dsb) di `globals.css`. Pasang font Plus Jakarta Sans (heading), Inter (body), JetBrains Mono (nomor surat/NIP) via `next/font`. Install Lucide Icons, Recharts, TanStack Table, React Hook Form, Zod. Install base komponen shadcn: `button`, `card`, `input`, `textarea`, `select`, `dialog`, `sheet`, `table`, `badge`, `dropdown-menu`, `tabs`, `toast`, `skeleton`, `avatar`, `calendar`, `popover`, `tooltip`, `alert`.
+- [ ] **Task 1.2 (Layouts & Persistent Navigation)**: Bangun 4 layout persisten: `app/(public)/layout.tsx` (Header Nav
+- [ ] **Task 2.3 (API Endpoints & Server Actions)**: Buat seluruh Server Actions dengan validasi Zod di `actions/`: `surat-masuk.actions.ts` (create, update, delete, uploadFile ke bucket `surat-masuk`, updateStatus), `surat-keluar.actions.ts` (create draf + generate nomor otomatis, submitApproval, approve, reject, arsipkan, delete), `disposisi.actions.ts` (create, teruskan, markDibaca, markSelesai), `arsip.actions.ts` (create + upload, update, delete), `agenda.actions.ts`, `pengumuman.actions.ts`, `cuti.actions.ts` (create + validasi bentrok tanggal + potong kuota saat disetujui, approve, reject), `inventaris.actions.ts`, `pengguna.actions.ts` (create via Supabase Auth invite, update, resetPassword, toggleAktif), `kategori.actions.ts`, `bidang.actions.ts`, `notifikasi.actions.ts`, `laporan.actions.ts` (agregat + generate PDF/Excel), `pengaturan.actions.ts`. Setiap action wajib cek role di server sebelum eksekusi dan menulis log ke tabel `audit_log`.
+- [ ] **Task 2.4 (Upload & Storage Integration)**: Konfigurasi Supabase Storage di `lib/storage.ts` — fungsi `uploadFile(bucket, file, path)`, `deleteFile(bucket, path)`, `getSignedUrl(bucket, path, expiresIn)`. Terapkan validasi mime-type dan max size di server (surat masuk/keluar 10 MB, arsip 25 MB, avatar 2 MB, lampiran cuti 5 MB). Buat preview PDF pakai `react-pdf` atau iframe signed URL.
+- [ ] **Task 2.5 (Frontend Data Binding & Mutations)**: Ganti seluruh data dummy dari Tahap 1 dengan pemanggilan Server Components (`async` page) dan Server Actions via `useActionState` / `useFormStatus`. Implementasi optimistic update untuk toggle baca notifikasi, tombol "Tandai Selesai" disposisi, dan toggle status pengguna. Aktifkan React Query atau SWR (opsional) untuk list yang berubah cepat. Pastikan seluruh skeleton, empty state, dan error state berfungsi nyata saat data kosong/gagal.
+- [ ] **Task 2.6 (Notifikasi Realtime & Sistem Bell)**: Integrasikan Supabase Realtime channel untuk tabel `notifikasi` (subscribe per `user_id`). Event pemicu notifikasi: disposisi baru masuk, surat keluar butuh approval, cuti disetujui/ditolak, pengumuman prioritas tinggi. Bell di header menampilkan badge merah jumlah belum dibaca + dropdown list + aksi "Tandai Semua Dibaca" dan tautan `link` ke halaman terkait.
+
+### Tahap 3: Integrasi Pihak Ketiga, Laporan, Keamanan, SEO, & Deployment
+*Tujuan: Menyempurnakan integrasi eksternal, optimasi performa, keamanan, dan rilis ke production.*
+
+- [ ] **Task 3.1 (Integrasi WhatsApp Gateway & Email)**: Fungsi `lib/notifikasi/whatsapp.ts` mendukung provider Fonnte/Wablas (env `WA_PROVIDER`, `WA_API_URL`, `WA_API_KEY`). Kirim notifikasi WhatsApp untuk event disposisi & approval surat (jika nomor pegawai tersedia). Integrasi SMTP untuk email undangan akun dan reset password (template HTML berbahasa Indonesia dengan kop dinas). Sertakan rate-limit pengiriman (maks 1 pesan per user per event).
+- [ ] **Task 3.2 (Laporan PDF & Excel)**: `lib/laporan/pdf.ts` pakai **pdf-lib** atau **@react-pdf/renderer** untuk generate laporan: Rekap Surat Masuk/Keluar Bulanan, Rekap Disposisi, Rekap Cuti, Rekap Inventaris Aset. `lib/laporan/excel.ts` pakai **exceljs** untuk ekspor `.xlsx`. Sertakan header kop surat dinas (dari pengaturan sistem), filter periode, dan total agregat di footer. Route unduh: `/api/laporan/[tipe]/route.ts` (streamed response).
+- [ ] **Task 3.3 (Non-Functional Requirements & Security)**: Pasang dynamic SEO tags (`generateMetadata` Next.js) di semua halaman publik; tambahkan `sitemap.ts` & `robots.ts` (dashboard/admin di-`noindex`). Terapkan CSRF token layer + same-origin check pada Server Actions mutate. Sanitasi XSS pakai `sanitize-html` atau `DOMPurify` untuk konten pengumuman/berita. Aktifkan rate-limiting login (5 gagal / 10 menit / IP) dengan **upstash-ratelimit** atau Redis sederhana. Set httpOnly, secure, sameSite=lax pada cookie sesi. Tambahkan audit log di setiap aksi CRUD penting (userId, aksi, entitas, entitasId, perubahan JSON).
+- [ ] **Task 3.4 (Audit Log & Pengaturan Sistem)**: Bangun halaman `/admin/pengaturan` (identitas instansi, logo, kop surat, format nomor surat — pola `{KODE}/{URUT}/{BIDANG}/{ROMAWI}/{TAHUN}`, konfigurasi WA, SMTP preview). Buat halaman `/admin/audit-log` untuk menampilkan riwayat aksi admin dengan filter user, entitas, dan tanggal. Simpan pengaturan di tabel baru `pengaturan` (key-value JSONB).
+- [ ] **Task 3.5 (End-to-End Testing & Bugfix)**: Uji alur lengkap: registrasi surat masuk → disposisi pimpinan → staf tindak lanjut → selesai; buat surat keluar → nomor otomatis → approval → arsip; ajukan cuti → persetujuan → kuota berkurang. Perbaiki error runtime, hydration mismatch, responsive glitches di mobile (drawer, tabel horizontal scroll), dan optimasi query (index pada kolom `status`, `tanggal`, `nomor_*`). Pastikan semua form punya validasi client & server yang sinkron.
+- [ ] **Task 3.6 (Production Build & Deployment)**: Siapkan `.env.production` lengkap (Supabase prod URL/keys, SMTP, WA, SESSION_SECRET). Verifikasi `npm run build` tanpa error/type warning. Deploy ke **Vercel** (koneksi repo), setup custom domain `sekredinas.dinaskab.go.id` via Vercel DNS. Konfigurasi Supabase Production Project + migrasi final (`drizzle-kit push`), bucket RLS production, dan backup terjadwal harian. Aktifkan Vercel Analytics + Sentry (opsional) untuk monitoring error production. Uji smoke test pascadeploy di domain production.
+
+---
+
+## 12. Master Starter Prompt (Siap Coding untuk AI Agent)
+*Salin prompt di bawah ini ke AI Coding Assistant (Google Antigravity / Cursor / Claude Code / GitHub Copilot / Roo Code / dll.) untuk memulai pengerjaan:*
+
+```markdown
+Halo! Kamu berperan sebagai Senior Fullstack Architect dan Lead Developer untuk proyek pemerintah daerah yang serius, aman, dan terpercaya.
+Saya ingin membangun aplikasi bernama **SekreDinas** (Sistem Manajemen Persuratan & Administrasi Sekretariat Dinas Terpadu) berdasarkan dokumen PRD ini.
+
+Silakan baca file @PRD.md secara menyeluruh terlebih dahulu.
+
+ATURAN EKSEKUSI (WAJIB DIPATUHI):
+
+1. **MODE EKSEKUSI: BERTAHAP PER FASE (PER MILESTONE).**
+   Kamu BUKAN mengeksekusi per task kecil, melainkan menyelesaikan 1 FASE PENUH secara tuntas dalam satu putaran kerja sebelum berhenti.
+
+2. **ALUR KERJA PER FASE (Tiga Tahap Utama di Bab 11):**
+   - **FASE 1 — Fondasi UI/UX & Seluruh Halaman (Dummy Data)**: Selesaikan Task 1.1 s.d. Task 1.5 secara lengkap dalam satu putaran. Setelah selesai, STOP. Laporkan seluruh halaman yang sudah dibangun + bukti screenshot/struktur folder, lalu tunggu konfirmasi saya sebelum masuk Fase 2.
+   - **FASE 2 — Database, Autentikasi, & Integrasi Data Dinamis**: Setelah saya konfirmasi, selesaikan Task 2.1 s.d. Task 2.6 secara lengkap dalam satu putaran. Setelah selesai, STOP. Laporkan skema yang ter-migrasi, RLS aktif, dan bukti data dinamis berjalan, lalu tunggu konfirmasi saya sebelum masuk Fase 3.
+   - **FASE 3 — Integrasi, Keamanan, Laporan, & Deployment**: Setelah saya konfirmasi, selesaikan Task 3.1 s.d. Task 3.6 secara lengkap dalam satu putaran. Laporkan hasil build produksi, deployment, dan smoke test akhir.
+
+3. **ATURAN TEKNIS WAJIB (Tidak Boleh Dilanggar):**
+   - **Tech Stack**: Next.js 15 (App Router) + TypeScript 5, Tailwind CSS v4, shadcn/ui, Lucide Icons, Drizzle ORM, Supabase (PostgreSQL + Auth + Storage + Realtime), React Hook Form + Zod, TanStack Table, Recharts, pdf-lib/exceljs.
+   - **UI/UX Design System**: Patuhi **100%** skema warna (Primary Navy `218 68% 22%`, Secondary Gold `42 92% 55%`), font Plus Jakarta Sans / Inter / JetBrains Mono, dan seluruh aturan komponen di Bab 4. **DILARANG KERAS** memakai warna default Tailwind, font default sistem, atau komponen shadcn tanpa override token warna.
+   - **Skema Database**: Gunakan persis skema `db/schema.ts` di Bab 10, JANGAN mengubah nama tabel/kolom tanpa izin. Semua relasi foreign key wajib sesuai.
+   - **Data Dummy**: DILARANG memakai "Lorem Ipsum". Wajib memakai data berbahasa Indonesia realistis sesuai contoh di Bab 9 (contoh: `Budi Santoso, S.E.`, `005/1234/DISDIK/2025`, `Kepala Dinas`, `INV-ELK-0001`).
+   - **Halaman**: DILARANG KERAS membuat halaman "Placeholder" atau "Sedang dalam pengembangan". SETIAP halaman di Bab 3 wajib dibangun penuh dengan data dummy lengkap di Fase 1.
+   - **Keamanan**: Wajib cek role di server (bukan hanya client), RLS aktif, sanitasi XSS, CSRF protection, rate-limit login, dan audit log di setiap aksi CRUD penting.
+
+4. **FORMAT PELAPORAN AKHIR FASE:**
+   Setelah menyelesaikan satu fase, laporkan dengan format:
+   - ✅ Daftar Task yang Selesai (X.Y lengkap)
+   - 📁 Struktur folder/file yang dibuat (tree)
+   - 🧪 Bukti hasil (rute yang bisa dibuka, screenshot, atau hasil `npm run build`)
+   - ⚠️ Catatan/kendala (jika ada)
+   - ❓ "Apakah saya boleh lanjut ke Fase berikutnya?"
+
+5. **JANGAN** pernah menyentuh pekerjaan Fase 2 saat masih berada di Fase 1, dan **JANGAN** pernah deploy ke production tanpa konfirmasi akhir saya.
+
+Jika kamu sudah membaca dan memahami seluruh PRD ini, silakan berikan **ringkasan pemahamanmu** (minimal: tech stack, 3 fase eksekusi, dan 3 aturan UI/UX paling penting) lalu tanyakan kesiapan saya untuk memulai **FASE 1 — Task 1.1**!
+```
