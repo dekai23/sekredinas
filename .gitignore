@@ -23,12 +23,21 @@ uploads/
 ~$*.xlsx
 ~$*.pptx
 
-# --- Tooling agen (kunci server, tak perlu ikut versi) ---
+# --- Tooling agen (kunci server & riwayat, tak perlu ikut versi) ---
 .opencode/server.lock.json
+.opencode/git/
+.kilo/
 
 # --- Database lokal (PGlite / PostgreSQL dev) ---
 .database/
 *.pglite
+
+# --- Berkas uji & sementara ---
+.token-uji.txt
+uji-*.ts
+cek*.ts
+perbaiki*.ts
+*.tsbuildinfo
 
 # --- Editor & OS ---
 .vscode/

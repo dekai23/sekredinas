@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* ==================================================================
+   SekreDinas - token desain (PRD.txt Bab 4)
+   Warna resmi: Primary Navy HSL(218 68% 22%), Secondary Emas
+   HSL(42 92% 55%), Accent Teal HSL(190 85% 42%).
+   Font: Plus Jakarta Sans (self-hosted), JetBrains Mono untuk nomor.
+   ================================================================== */
+
+@theme {
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Consolas,
+    "Liberation Mono", monospace;
+
+  /* Primary - Navy */
+  --color-navy-50: hsl(215 60% 97%);
+  --color-navy-100: hsl(214 55% 93%);
+  --color-navy-200: hsl(213 50% 86%);
+  --color-navy-300: hsl(212 45% 76%);
+  --color-navy-400: hsl(211 40% 62%);
+  --color-navy-500: hsl(218 55% 42%);
+  --color-navy-600: hsl(218 62% 30%);
+  --color-navy-700: hsl(218 68% 22%);
+  --color-navy-800: hsl(218 66% 18%);
+  --color-navy-900: hsl(219 64% 14%);
+  --color-navy-950: hsl(220 62% 9%);
+
+  /* Secondary - Emas */
+  --color-emas-50: hsl(45 90% 96%);
+  --color-emas-100: hsl(43 88% 90%);
+  --color-emas-200: hsl(42 86% 80%);
+  --color-emas-300: hsl(42 88% 68%);
+  --color-emas-400: hsl(42 92% 58%);
+  --color-emas-500: hsl(42 92% 55%);
+  --color-emas-600: hsl(38 80% 44%);
+  --color-emas-700: hsl(33 70% 34%);
+
+  /* Accent - Teal */
+  --color-teal-50: hsl(188 80% 96%);
+  --color-teal-100: hsl(187 76% 90%);
+  --color-teal-200: hsl(186 72% 80%);
+  --color-teal-300: hsl(190 78% 62%);
+  --color-teal-400: hsl(190 82% 50%);
+  --color-teal-500: hsl(190 85% 42%);
+  --color-teal-600: hsl(192 78% 34%);
+  --color-teal-700: hsl(194 70% 26%);
+
+  /* Lebar sidebar area internal (PRD 4.3) */
+  --spacing-sidebar: 260px;
+}
+
+/* ------------------------------------------------------------------
+   Cetak: kertas F4/Folio 21,6 x 33 cm sesuai kop surat resmi.
+   Margin mengikuti kop bkd.docx: kiri 2,54 cm; kanan 1,84 cm; atas 1,25 cm.
+   ------------------------------------------------------------------ */
+@page {
+  size: 21.6cm 33cm;
+  margin: 1.25cm 1.84cm 1.5cm 2.54cm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  /* Sembunyikan navigasi dan tombol saat mencetak naskah. */
+  .cetak-sembunyi {
+    display: none !important;
+  }
+
+  .cetak-halaman {
+    box-shadow: none !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  .cetak-putus {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+

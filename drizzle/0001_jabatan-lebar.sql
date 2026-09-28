@@ -1,0 +1,1 @@
+ALTER TABLE "pegawai" ALTER COLUMN "jabatan" SET DATA TYPE varchar(300);
