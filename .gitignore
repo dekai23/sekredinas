@@ -1,4 +1,4 @@
-# --- Node / Next.js ---
+﻿# --- Node / Next.js ---
 node_modules/
 .next/
 out/
@@ -17,6 +17,9 @@ dist/
 *.sqlite3
 storage/
 uploads/
+# Folder unggahan berkas persuratan (lihat lib/unggah.ts & .env.example)
+.uploads/
+.uploads/
 
 # --- Berkas sementara Office (file lock) ---
 ~$*.docx
@@ -45,3 +48,7 @@ perbaiki*.ts
 Thumbs.db
 desktop.ini
 *.log
+
+# Token uji sementara
+uji-token-*.txt
+

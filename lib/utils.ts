@@ -112,7 +112,22 @@ export function rupiah(nilai: number | null | undefined): string {
   }).format(nilai);
 }
 
-/** Jumlah hari kerja (Senin-Jumat) antara dua tanggal, inklusif. */
+/**
+ * Menambah n hari kerja (Senin-Jumat) pada sebuah tanggal.
+ * Dipakai untuk batas waktu disposisi: 2 hari kerja (PRD 6.D).
+ */
+export function tambahHariKerja(tanggal: Date, jumlah: number): Date {
+  const hasil = new Date(tanggal);
+  let sisa = jumlah;
+  while (sisa > 0) {
+    hasil.setDate(hasil.getDate() + 1);
+    const hari = hasil.getDay();
+    if (hari !== 0 && hari !== 6) sisa -= 1;
+  }
+  return hasil;
+}
+
+/** Jumlah hari kerja antara dua tanggal, inklusif. */
 export function hitungHariKerja(mulai: Date, selesai: Date): number {
   if (Number.isNaN(mulai.getTime()) || Number.isNaN(selesai.getTime())) return 0;
   let total = 0;

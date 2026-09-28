@@ -1,10 +1,10 @@
-# SekreDinas — Sistem Informasi BKPSDM Kabupaten Yahukimo
+﻿# SekreDinas â€” Sistem Informasi BKPSDM Kabupaten Yahukimo
 
 Repositori kerja pembangunan **sistem aplikasi + sistem informasi kantor** Badan Kepegawaian dan
 Pengembangan Sumber Daya Manusia (BKPSDM) Kabupaten Yahukimo, meliputi persuratan, disposisi,
 arsip digital, kepegawaian, agenda, pengumuman, inventaris, dan halaman publik.
 
-- **Status saat ini:** 🟡 **Fase 1 — Kerangka aplikasi berjalan** (login, RBAC, portal publik,
+- **Status saat ini:** ðŸŸ¡ **Fase 1 â€” Kerangka aplikasi berjalan** (login, RBAC, portal publik,
   dashboard, admin pengguna, skema basis data terisi data master)
 - **Acuan fitur:** `PRD.txt` (sudah disesuaikan dari "Kab. Sleman" menjadi "Kab. Yahukimo")
 - **Aset instansi:** logo, kop surat, struktur organisasi, dan data pegawai **sudah lengkap**
@@ -54,10 +54,41 @@ npm run dev                 # buka http://localhost:3000
 | `components/kop/` | `<KopSurat />` replikasi kop resmi F4 |
 | `components/ui/` | Komponen dasar: tombol, formulir, kartu, lencana, tabel |
 | `components/internal/` | Sidebar, topbar, dan peta menu sesuai hak akses |
+| `lib/operasi/` | Logika bisnis (tanpa HTTP) agar dapat diuji tanpa peramban |
+| `lib/queries/` | Pembacaan data untuk server component |
+| `lib/validasi/` | Skema Zod formulir persuratan |
+| `app/berkas/` | Route handler penyaji berkas unggahan (wajib login) |
 | `lib/db/schema-*.ts` | Skema basis data (17 tabel) |
 | `lib/auth/` | Sandi (bcrypt), sesi (JWT cookie), hak akses (RBAC) |
 | `lib/data/` | Data benih & pembacaan pengaturan instansi |
 | `proxy.ts` | Penjaga zona internal (menggantikan middleware.ts di Next 16) |
+
+---
+
+## 0.2. Alur persuratan yang sudah berjalan (Fase 2)
+
+**Surat masuk** â€” buka `/dashboard/surat-masuk`, pilih **Registrasi surat**, isi asal
+surat, perihal, tanggal, sifat, lalu unggah scan **PDF (maks 10 MB)**. Setelah disimpan
+sistem membuat nomor agenda otomatis `SM-2026-0001` (reset tiap tahun) dan mencatat
+ke audit log. Surat sifat **Rahasia** hanya terlihat oleh Admin & Pimpinan.
+
+**Disposisi** â€” buka detail surat, bagian **Tambah disposisi**: pilih pegawai tujuan,
+tulis instruksi, batas waktu (default 2 hari kerja). Disposisi bisa **berantai**
+(Kepala Bidang â†’ Kepala Sub Bidang â†’ Staf) dan yang lewat batas waktu diberi lencana
+merah **Terlambat**. Penerima menutupnya dari `/dashboard/disposisi` dengan catatan
+tindak lanjut.
+
+**Surat keluar** â€” `/dashboard/surat-keluar/baru` untuk menyusun naskah. Nomor surat
+diberikan saat **diajukan** (bukan saat draf) dengan format
+`{KODE_KATEGORI}/{URUT}/{KODE_UNIT}/{BULAN_ROMAWI}/{TAHUN}`, contoh
+`KP/001/SEK-UK/IX/2026`. Pimpinan menyetujui dari `/dashboard/persetujuan/surat` atau
+mengembalikan dengan catatan. **Setelah disetujui surat terkunci** dan tidak dapat
+diedit. Halaman detail menampilkan pratinjau naskah pada kop surat F4 yang bisa dicetak
+langsung.
+
+> Berkas unggahan disimpan di folder `UPLOAD_DIR` (bukan di `public/`) dan hanya dapat
+> dibuka melalui `/berkas/...` yang selalu memeriksa sesi pengguna. Isi berkas
+> diverifikasi dari magic bytes, bukan sekadar nama ekstensi.
 
 ---
 
@@ -70,12 +101,12 @@ npm run dev                 # buka http://localhost:3000
 | `drizzle/` | Berkas migrasi SQL hasil `drizzle-kit generate` |
 | `DATA PEGAWAI.xlsx` | Data 32 pegawai (No, NIP, Nama, Golongan, Jenis Jabatan, Jabatan, Eselon, Status) |
 | `STRUKTUR.docx` | Susunan struktur organisasi BKPSDM |
-| `kop bkd.docx` | Kop surat resmi (Pemerintah Kabupaten Yahukimo — BKPSDM) |
-| `LOGO Yahukimo2.png` | Logo Kabupaten Yahukimo resolusi tinggi (1813 × 1504 px) |
+| `kop bkd.docx` | Kop surat resmi (Pemerintah Kabupaten Yahukimo â€” BKPSDM) |
+| `LOGO Yahukimo2.png` | Logo Kabupaten Yahukimo resolusi tinggi (1813 Ã— 1504 px) |
 | `docs/KOP-SURAT.md` | Spesifikasi teknis kop surat (hasil pembacaan `kop bkd.docx`) |
 | `docs/ARSITEKTUR.md` | Pola **satu sistem dua zona**: portal publik (informasi untuk umum) + aplikasi internal, beserta aturan keamanan & privasinya |
 | `seed/` | Data master hasil ekstraksi, siap dipakai sebagai seed aplikasi |
-| `tools/extract-seed.ps1` | Skrip ekstraksi ulang Excel/Word → JSON |
+| `tools/extract-seed.ps1` | Skrip ekstraksi ulang Excel/Word â†’ JSON |
 | `.opencode/` | Tooling agen (bukan bagian aplikasi) |
 
 ## 2. Data master hasil ekstraksi (`seed/`)
@@ -91,7 +122,7 @@ npm run dev                 # buka http://localhost:3000
 
 | Kode | Unit | Induk | Pegawai |
 | :--- | :--- | :--- | :--- |
-| BKD | Badan Kepegawaian dan Pengembangan SDM Kab. Yahukimo | — | 0 |
+| BKD | Badan Kepegawaian dan Pengembangan SDM Kab. Yahukimo | â€” | 0 |
 | SEK | Sekretariat | BKD | 1 |
 | SEK-UK | Sub Bagian Umum dan Kepegawaian | SEK | 4 |
 | SEK-PK | Sub Bagian Perencanaan dan Keuangan | SEK | 4 |
@@ -110,12 +141,12 @@ npm run dev                 # buka http://localhost:3000
 
 **Rekap peran pegawai:** 1 Sekretaris, 2 Kepala Bidang, 7 Kepala Sub Bidang, 2 Kepala Sub Bagian,
 2 Pl./Plt. Kepala Sub Bidang, 16 Pelaksana, 2 Fungsional.
-**Role aplikasi hasil pemetaan:** **11 pimpinan**, **1 admin** (Theodorus Valentinus, S.Kom. —
+**Role aplikasi hasil pemetaan:** **11 pimpinan**, **1 admin** (Theodorus Valentinus, S.Kom. â€”
 Admin Sistem), **20 pegawai**.
 
 **Aturan penempatan yang divalidasi otomatis oleh skrip:**
-1. Pelaksana hanya boleh berada pada jabatan eselon terendah (Sub Bidang/Sub Bagian) — tidak boleh
-   langsung di bawah Bidang/Sekretariat. (Data saat ini: ✅ patuh.)
+1. Pelaksana hanya boleh berada pada jabatan eselon terendah (Sub Bidang/Sub Bagian) â€” tidak boleh
+   langsung di bawah Bidang/Sekretariat. (Data saat ini: âœ… patuh.)
 2. Jabatan fungsional berada pada "Kelompok Jabatan Fungsional" yang dibawahi langsung Kepala Badan.
 3. Unit yang hanya dijabat Pl./Plt. ditandai sebagai *tanpa pejabat definitif*.
 
@@ -130,31 +161,33 @@ ke TEMP lebih dulu sehingga tetap berjalan walau berkas sedang dibuka di Word/Ex
 
 ## 4. Catatan penting
 
-1. **Kepala Badan belum ada pada daftar pegawai** — perlu ditambahkan agar akun pimpinan tertinggi tersedia.
+1. **Kepala Badan belum ada pada daftar pegawai** â€” perlu ditambahkan agar akun pimpinan tertinggi tersedia.
 2. **Penulisan resmi nama unit masih ada variasi antar dokumen:** `Fasilitasi dan Profesi ASN` (STRUKTUR.docx)
    vs `Fasilitasi Profesi ASN` (DATA PEGAWAI.xlsx); `Penilaian Kinerja Aparatur` (STRUKTUR.docx) vs
    `Penilaian Kinerja Aparatur, Disiplin dan Penghargaan` (DATA PEGAWAI.xlsx).
 3. **Domain email instansi:** `yahukimokab.go.id` (email kantor `bkpsdm@yahukimokab.go.id`). Usulan email
    pegawai pola `nama.tanpa.gelar@yahukimokab.go.id` sudah dibuat pada `seed/pegawai.json` (kolom
-   `usulanEmail`) — perlu dipastikan apakah login memakai email tersebut atau memakai NIP.
-4. **Kewenangan Pl./Plt.** (PENIUS SIEP, S.E. dan TINUS BAHABOL, S.Pd. — NON ESELON) — perlu diputuskan
+   `usulanEmail`) â€” perlu dipastikan apakah login memakai email tersebut atau memakai NIP.
+4. **Kewenangan Pl./Plt.** (PENIUS SIEP, S.E. dan TINUS BAHABOL, S.Pd. â€” NON ESELON) â€” perlu diputuskan
    apakah diberi role `pimpinan` atau tetap `pegawai`.
 5. **Excel `DATA PEGAWAI.xlsx` masih menautkan 4 workbook luar** (`AGAMA`, `DATA PNS per 30 Agustus 2026`,
    `Jabatan`, `PANGKAT`). Jika data tersebut diperlukan, mohon berkas aslinya disertakan.
 6. **Repositori Git sudah aktif** (branch `master`). Perubahan dikomit per fase.
-7. `STRUKTUR.docx` dan `kop bkd.docx` sempat terbuka di Word (file lock) — tutup Word sebelum mengganti berkas.
-8. **Kategori surat masih usulan** — kode `KP`, `MU`, `PS`, dst. menentukan nomor surat
+7. `STRUKTUR.docx` dan `kop bkd.docx` sempat terbuka di Word (file lock) â€” tutup Word sebelum mengganti berkas.
+8. **Kategori surat masih usulan** â€” kode `KP`, `MU`, `PS`, dst. menentukan nomor surat
    keluar dan perlu disesuaikan dengan format penomoran yang berlaku.
 
 ## 5. Rencana fase berikutnya
 
 | Fase | Status | Lingkup |
 | :--- | :--- | :--- |
-| 0 | ✅ selesai | Data master: seed pegawai/unit/instansi, dokumen kop & arsitektur |
-| 1 | ✅ selesai | Kerangka aplikasi, autentikasi multi-role, RBAC, layout, skema DB, portal publik dasar |
-| 2 | ⏳ berikutnya | Surat masuk, surat keluar (auto-nomor + kop surat), disposisi berantai |
-| 3 | | Arsip digital, agenda, pengumuman |
+| 0 | âœ… selesai | Data master: seed pegawai/unit/instansi, dokumen kop & arsitektur |
+| 1 | âœ… selesai | Kerangka aplikasi, autentikasi multi-role, RBAC, layout, skema DB, portal publik dasar |
+| 2 | ✅ selesai | Surat masuk, surat keluar (nomor otomatis + kop F4), disposisi berantai |
+| 3 | ⏳ berikutnya | Arsip digital, agenda, pengumuman |
 | 4 | | Kepegawaian & cuti, inventaris aset |
 | 5 | | Dashboard lanjutan, laporan PDF/Excel, notifikasi |
 | 6 | | Penyempurnaan halaman publik, PPID, SEO, penguatan keamanan |
 | 7 | | Deploy, backup, pelatihan staf |
+
+
