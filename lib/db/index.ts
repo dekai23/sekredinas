@@ -27,11 +27,27 @@ const globalForDb = globalThis as unknown as {
 };
 
 /**
+ * Alamat database PostgreSQL.
+ *
+ * Mendukung `DATABASE_URL` (umum) sekaligus variabel yang disediakan otomatis
+ * oleh Netlify DB (Neon) yaitu `NETLIFY_DATABASE_URL`, agar deploy di Netlify
+ * tidak perlu konfigurasi tambahan.
+ */
+function urlDatabase(): string | undefined {
+  return (
+    process.env.DATABASE_URL?.trim() ||
+    process.env.NETLIFY_DATABASE_URL?.trim() ||
+    process.env.NETLIFY_DB_URL?.trim() ||
+    undefined
+  );
+}
+
+/**
  * Pembuat koneksi (versi async; dipakai oleh skrip migrate/seed).
  * Dipisahkan dari `db` agar skrip dapat membuka koneksi sendiri.
  */
 export async function buatKoneksi(): Promise<Database> {
-  const url = process.env.DATABASE_URL?.trim();
+  const url = urlDatabase();
 
   if (url) {
     // Diimpor dinamis: paket `postgres` hanya dibutuhkan bila DATABASE_URL
@@ -91,7 +107,7 @@ export const db: Database = new Proxy({} as Database, {
 
 /** Versi sinkron: `postgres` dimuat hanya bila DATABASE_URL benar-benar terisi. */
 function buatKoneksiSinkron(): Database {
-  const url = process.env.DATABASE_URL?.trim();
+  const url = urlDatabase();
 
   if (!url) {
     const client = new PGlite(siapkanFolderPGlite());

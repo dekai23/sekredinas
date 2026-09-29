@@ -1,0 +1,18 @@
+# Konfigurasi deploy Netlify untuk SekreDinas (Next.js App Router).
+#
+# Catatan penting:
+#  - Netlify bersifat serverless, sehingga PGlite (database berbasis disk)
+#    TIDAK dapat dipakai. Wajib memakai PostgreSQL cloud.
+#  - Cara termudah: aktifkan "Netlify DB" (Neon) pada situs ini. Netlify akan
+#    mengisi variabel NETLIFY_DATABASE_URL secara otomatis, dan aplikasi
+#    sudah membacanya (lihat lib/db/index.ts).
+#  - Isi juga variabel: AUTH_SECRET (min. 32 karakter) dan NEXT_PUBLIC_APP_URL.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Node 22 dipakai karena Next.js 16 memerlukan Node.js versi baru.
