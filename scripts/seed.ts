@@ -456,6 +456,21 @@ async function utama() {
     console.log("[seed] tabel pegawai dikosongkan.");
   }
 
+  // Amankan dari menimpa data: bila database sudah pernah diisi, lewati.
+  // Berguna saat seed dijalankan otomatis pada setiap build (mis. Netlify).
+  // Gunakan `--paksa` untuk memaksa seed meski data sudah ada.
+  if (!process.argv.includes("--paksa") && !process.argv.includes("--hapus-pegawai")) {
+    try {
+      const ada = await db.select({ id: schema.pegawai.id }).from(schema.pegawai).limit(1);
+      if (ada.length > 0) {
+        console.log("[seed] database sudah berisi data - seeding dilewati.");
+        process.exit(0);
+      }
+    } catch {
+      // Tabel belum ada (database baru) -> lanjutkan seeding.
+    }
+  }
+
   const idPerKode = await seedUnitKerja();
   await seedPemerintahDaerah();
   await seedPegawai(idPerKode);
