@@ -18,7 +18,10 @@ const DIREKTORI_MIGRASI = resolve(process.cwd(), "drizzle");
 const args = new Set(process.argv.slice(2));
 
 async function utama() {
-  const url = process.env.DATABASE_URL?.trim();
+  const url =
+    process.env.DATABASE_URL?.trim() ||
+    process.env.NETLIFY_DATABASE_URL?.trim() ||
+    process.env.NETLIFY_DB_URL?.trim();
 
   if (args.has("--reset")) {
     if (url) {

@@ -6,6 +6,13 @@ import { DaftarSosmed } from "@/components/publik/sosmed";
 import { sesiSaatIni } from "@/lib/auth/sesi";
 import { identitasInstansi } from "@/lib/data/instansi";
 
+/**
+ * Seluruh halaman publik dirender saat diminta (bukan saat build), supaya
+ * proses build tidak memerlukan koneksi/tabel database. Penting untuk deploy
+ * serverless (Netlify) di mana database baru tersedia saat runtime.
+ */
+export const dynamic = "force-dynamic";
+
 const MENU_PUBLIK = [
   { label: "Beranda", href: "/" },
   { label: "Profil", href: "/profil" },
