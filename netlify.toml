@@ -9,9 +9,7 @@
 #  - Isi juga variabel: AUTH_SECRET (min. 32 karakter) dan NEXT_PUBLIC_APP_URL.
 
 [build]
-  # Migrasi tabel lalu isi data awal (seed aman dijalankan berulang: bila
-  # database sudah berisi data, seeding otomatis dilewati), baru build aplikasi.
-  command = "npm run db:migrate && npm run db:seed && npm run build"
+  command = "npm run build"
   publish = ".next"
 
 [build.environment]
