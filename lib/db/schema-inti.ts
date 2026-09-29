@@ -33,6 +33,7 @@ export const jenisUnitEnum = pgEnum("jenis_unit", [
   "bidang",
   "sub_bidang",
   "kelompok_jabatan_fungsional",
+  "pemerintah",
 ]);
 
 /** Peran jabatan - dasar hak disposisi/persetujuan (lihat lib/auth/hak-akses.ts). */
@@ -97,6 +98,12 @@ export const unitKerja = pgTable(
     urutan: integer("urutan").notNull().default(0),
     /** Eselon jabatan pimpinan unit: II.b / III.a / III.b / IV.a / IV.b */
     pejabatEselon: varchar("pejabat_eselon", { length: 10 }),
+    /**
+     * true = unit ini berada langsung di bawah "Pemerintah Kabupaten
+     * Yahukimo" (bukan sebuah unit kerja, melainkan induk tertinggi).
+     * Dipakai untuk unit setingkat Badan yang tidak memiliki unit induk.
+     */
+    indukPemkab: boolean("induk_pemkab").notNull().default(false),
     publik: boolean("publik").notNull().default(true),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),

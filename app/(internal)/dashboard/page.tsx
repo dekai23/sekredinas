@@ -237,24 +237,31 @@ export default async function HalamanDashboard() {
 
       <Kartu>
         <KartuKepala
-          judul="Modul yang sedang disiapkan"
-          deskripsi="Pembangunan bertahap sesuai rencana proyek."
+          judul="Akses cepat modul"
+          deskripsi="Arsip digital, agenda, pengumuman, dan cuti kini tersedia."
         />
         <KartuIsi>
-          <ul className="grid gap-2 text-sm text-navy-600 sm:grid-cols-2">
-            <li className="cetak-putus rounded-lg bg-navy-50 px-3 py-2">
-              Fase 2 — Surat masuk, surat keluar (nomor otomatis &amp; kop F4), disposisi
-            </li>
-            <li className="cetak-putus rounded-lg bg-navy-50 px-3 py-2">
-              Fase 3 — Arsip digital, agenda, pengumuman
-            </li>
-            <li className="cetak-putus rounded-lg bg-navy-50 px-3 py-2">
-              Fase 4 — Kepegawaian &amp; cuti, inventaris
-            </li>
-            <li className="cetak-putus rounded-lg bg-navy-50 px-3 py-2">
-              Fase 5 — Dashboard, laporan, notifikasi
-            </li>
-          </ul>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { label: "Arsip Digital", href: "/dashboard/arsip", izin: "arsip.lihat" as const },
+              { label: "Agenda Kegiatan", href: "/dashboard/agenda", izin: "agenda.lihat" as const },
+              { label: "Pengumuman", href: "/dashboard/pengumuman", izin: "pengumuman.lihat" as const },
+              { label: "Cuti Saya", href: "/dashboard/cuti", izin: "cuti.buat" as const },
+              { label: "Inventaris Aset", href: "/dashboard/inventaris", izin: "inventaris.lihat" as const },
+              { label: "Laporan", href: "/dashboard/laporan", izin: "laporan.lihat" as const },
+            ]
+              .filter((m) => boleh(sesi, m.izin))
+              .map((m) => (
+                <Link
+                  key={m.href}
+                  href={m.href}
+                  className="flex items-center justify-between rounded-lg border border-navy-100 px-4 py-3 text-sm font-semibold text-navy-700 transition-colors hover:border-emas-300 hover:bg-navy-50"
+                >
+                  {m.label}
+                  <ArrowRight className="h-4 w-4 text-navy-400" aria-hidden />
+                </Link>
+              ))}
+          </div>
         </KartuIsi>
       </Kartu>
     </div>

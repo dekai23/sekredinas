@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { asc } from "drizzle-orm";
 import { Building2, Mail, MapPin, Phone } from "lucide-react";
 
-import { KopSurat } from "@/components/kop/kop-surat";
+import { GelombangNavy } from "@/components/publik/ilustrasi";
 import { Kartu, KartuIsi, KartuKepala, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { identitasInstansi } from "@/lib/data/instansi";
@@ -37,6 +37,7 @@ export default async function HalamanProfil() {
       kode: schema.unitKerja.kode,
       jenis: schema.unitKerja.jenis,
       indukId: schema.unitKerja.indukId,
+      indukPemkab: schema.unitKerja.indukPemkab,
       urutan: schema.unitKerja.urutan,
       pejabatEselon: schema.unitKerja.pejabatEselon,
     })
@@ -61,7 +62,8 @@ export default async function HalamanProfil() {
 
   // Unit teratas (tanpa induk) beserta seluruh data unit untuk pohon.
   const semuaUnit = unit;
-  const atas = bangunPohonUnit(semuaUnit);
+  const atasPemkab = semuaUnit.filter((u) => u.indukPemkab);
+  const atasLain = semuaUnit.filter((u) => u.indukId === null && !u.indukPemkab);
 
   const LEBAR_JENIS: Record<string, string> = {
     badan: "Badan",
@@ -74,36 +76,34 @@ export default async function HalamanProfil() {
 
   return (
     <div>
-      <section className="border-b border-navy-100 bg-navy-50/60">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-          <KopSurat />
-          <div className="mt-8">
-            <Lencana nada="emas">Profil Instansi</Lencana>
-            <h1 className="mt-3 text-3xl font-bold text-navy-800">{instansi.namaBadan}</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-navy-600">
-              Instansi pemerintah daerah di Kabupaten Yahukimo yang melaksanakan urusan
-              pemerintahan di bidang kepegawaian dan pengembangan sumber daya manusia.
-            </p>
-          </div>
+      <section className="relative overflow-hidden">
+        <GelombangNavy className="absolute inset-0" />
+        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
+          <Lencana nada="emas">Profil Instansi</Lencana>
+          <h1 className="mt-3 max-w-4xl text-3xl font-bold text-white">{instansi.namaBadan}</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-navy-100">
+            Instansi pemerintah daerah di Kabupaten Yahukimo yang melaksanakan urusan
+            pemerintahan di bidang kepegawaian dan pengembangan sumber daya manusia.
+          </p>
 
           <dl className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-              <dt className="flex items-center gap-1.5 text-xs font-semibold text-navy-500">
+            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+              <dt className="flex items-center gap-1.5 text-xs font-semibold text-emas-200">
                 <MapPin className="h-3.5 w-3.5" aria-hidden /> Alamat
               </dt>
-              <dd className="mt-1 text-sm text-navy-800">{instansi.alamat}</dd>
+              <dd className="mt-1 text-sm text-white">{instansi.alamat}</dd>
             </div>
-            <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-              <dt className="flex items-center gap-1.5 text-xs font-semibold text-navy-500">
+            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+              <dt className="flex items-center gap-1.5 text-xs font-semibold text-emas-200">
                 <Mail className="h-3.5 w-3.5" aria-hidden /> Email
               </dt>
-              <dd className="mt-1 text-sm text-navy-800">{instansi.emailKantor}</dd>
+              <dd className="mt-1 text-sm text-white">{instansi.emailKantor}</dd>
             </div>
-            <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-              <dt className="flex items-center gap-1.5 text-xs font-semibold text-navy-500">
+            <div className="rounded-xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur">
+              <dt className="flex items-center gap-1.5 text-xs font-semibold text-emas-200">
                 <Phone className="h-3.5 w-3.5" aria-hidden /> Telepon
               </dt>
-              <dd className="mt-1 text-sm text-navy-800">
+              <dd className="mt-1 text-sm text-white">
                 {instansi.telepon || "Belum diisi"}
               </dd>
             </div>
@@ -138,7 +138,27 @@ export default async function HalamanProfil() {
             deskripsi={`${unit.length} unit kerja, sesuai STRUKTUR.docx. Nama unit dapat disesuaikan oleh admin.`}
           />
           <KartuIsi className="space-y-5">
-            {atas.map((u) => (
+            {atasPemkab.length > 0 ? (
+              <div className="rounded-xl border-2 border-navy-200 bg-navy-50/50 p-3">
+                <div className="mb-3 flex items-center gap-2">
+                  <Lencana nada="gelap">Pemerintah Kabupaten Yahukimo</Lencana>
+                </div>
+                <div className="space-y-2">
+                  {atasPemkab.map((u) => (
+                    <UnitBaris
+                      key={u.id}
+                      unit={u}
+                      semuaUnit={semuaUnit}
+                      namaPejabat={namaPejabat}
+                      lebarJenis={LEBAR_JENIS}
+                      tingkat={1}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {atasLain.map((u) => (
               <UnitBaris
                 key={u.id}
                 unit={u}
@@ -162,13 +182,6 @@ interface BarisUnit {
   jenis: string;
   indukId: string | null;
   pejabatEselon: string | null;
-}
-
-/** Semua unit kerja, dikelompokkan induk -> anak untuk tampilan berjenjang. */
-function bangunPohonUnit(unit: BarisUnit[]): BarisUnit[] {
-  return unit
-    .filter((u) => u.indukId === null)
-    .map((u) => ({ ...u }));
 }
 
 /** Sub unit langsung dari sebuah unit. */

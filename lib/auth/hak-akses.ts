@@ -38,7 +38,12 @@ export type Izin =
   | "cuti.kelola"
   | "inventaris.lihat"
   | "inventaris.kelola"
+  /* absensi (presensi) ASN - akses terbatas */
+  | "absensi.lihat"
+  | "absensi.kelola"
   /* admin & laporan */
+  | "berita.kelola"
+  | "layanan.kelola"
   | "pengguna.kelola"
   | "unit-kelola"
   | "kategori.kelola"
@@ -60,6 +65,24 @@ export const PERAN_PIMPINAN = [
 
 export function adalahPimpinan(peran: string): boolean {
   return (PERAN_PIMPINAN as readonly string[]).includes(peran);
+}
+
+/**
+ * Pengelola absensi (presensi) ASN.
+ *
+ * Selain Admin, hanya Kepala Sub Bagian Umum dan Kepegawaian (beserta
+ * plt-nya) yang berwenang. Kewenangan dikenali dari peran jabatan yang
+ * berjenis kepala sub bagian DAN unit kerja yang menangani "umum" sekaligus
+ * "kepegawaian" (di BKPSDM: unit `SEK-UK` "Sub Bagian Umum dan Kepegawaian").
+ */
+export function adalahPengelolaAbsensi(sesi: SesiPengguna | null): boolean {
+  if (!sesi) return false;
+  if (sesi.role === "admin") return true;
+  const kepala =
+    sesi.peran === "kepala_sub_bagian" || sesi.peran === "plt_kepala_sub_bagian";
+  if (!kepala) return false;
+  const unit = (sesi.unit ?? "").toLowerCase();
+  return unit.includes("umum") && unit.includes("kepegawaian");
 }
 
 const IZIN_PEGAWAI: Izin[] = [
@@ -98,10 +121,18 @@ const IZIN_ADMIN: Izin[] = [
   "kategori.kelola",
   "pengaturan.kelola",
   "audit.lihat",
+  "absensi.lihat",
+  "absensi.kelola",
+  "berita.kelola",
+  "layanan.kelola",
 ];
 
 export function boleh(sesi: SesiPengguna | null, izin: Izin): boolean {
   if (!sesi || !sesi.role) return false;
+  // Absensi dibatasi: admin + Kepala Sub Bagian Umum & Kepegawaian saja.
+  if (izin === "absensi.lihat" || izin === "absensi.kelola") {
+    return adalahPengelolaAbsensi(sesi);
+  }
   if (sesi.role === "admin") return IZIN_ADMIN.includes(izin);
   if (sesi.role === "pimpinan" || adalahPimpinan(sesi.peran)) {
     return IZIN_PIMPINAN.includes(izin);

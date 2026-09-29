@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, gte, isNull, lte, or } from "drizzle-orm";
 import { Megaphone } from "lucide-react";
 
+import { GelombangNavy } from "@/components/publik/ilustrasi";
 import { Kartu, KartuIsi, KeadaanKosong, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
+import { LABEL_KATEGORI_PENGUMUMAN, LABEL_PRIORITAS } from "@/lib/label";
 import { tanggalPanjang } from "@/lib/utils";
 
-export const revalidate = 300;
+export const revalidate = 120;
 
 export const metadata: Metadata = {
   title: "Pengumuman",
@@ -15,8 +17,11 @@ export const metadata: Metadata = {
     "Kabupaten Yahukimo.",
 };
 
-/** Daftar pengumuman yang ditandai untuk ditayangkan di portal publik. */
+/** Pengumuman publik yang belum berakhir masa tayangnya. */
 export default async function HalamanPengumuman() {
+  const awalHari = new Date();
+  awalHari.setHours(0, 0, 0, 0);
+
   const daftar = await db
     .select({
       id: schema.pengumuman.id,
@@ -26,20 +31,34 @@ export default async function HalamanPengumuman() {
       kategori: schema.pengumuman.kategori,
       prioritas: schema.pengumuman.prioritas,
       tanggalMulai: schema.pengumuman.tanggalMulai,
+      tanggalBerakhir: schema.pengumuman.tanggalBerakhir,
     })
     .from(schema.pengumuman)
-    .where(eq(schema.pengumuman.publik, true))
+    .where(
+      and(
+        eq(schema.pengumuman.publik, true),
+        lte(schema.pengumuman.tanggalMulai, new Date()),
+        or(isNull(schema.pengumuman.tanggalBerakhir), gte(schema.pengumuman.tanggalBerakhir, awalHari)),
+      ),
+    )
     .orderBy(desc(schema.pengumuman.tanggalMulai));
 
-  return (
-    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <Lencana nada="emas">Informasi</Lencana>
-      <h1 className="mt-3 text-3xl font-bold text-navy-800">Pengumuman</h1>
-      <p className="mt-2 text-sm text-navy-600">
-        Pengumuman resmi instansi yang dapat dilihat masyarakat umum.
-      </p>
+  const [utama, ...lainnya] = daftar;
 
-      <div className="mt-8 space-y-4">
+  return (
+    <div>
+      <section className="relative overflow-hidden">
+        <GelombangNavy className="absolute inset-0" />
+        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
+          <Lencana nada="emas">Informasi</Lencana>
+          <h1 className="mt-3 text-3xl font-bold text-white">Pengumuman</h1>
+          <p className="mt-2 max-w-2xl text-sm text-navy-100">
+            Pengumuman resmi instansi yang dapat dilihat masyarakat umum.
+          </p>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         {daftar.length === 0 ? (
           <Kartu>
             <KeadaanKosong
@@ -49,31 +68,59 @@ export default async function HalamanPengumuman() {
             />
           </Kartu>
         ) : (
-          daftar.map((p) => (
-            <Kartu key={p.id}>
-              <KartuIsi>
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <h2 className="text-base font-bold text-navy-800">{p.judul}</h2>
-                  <div className="flex gap-1">
-                    <Lencana>{p.kategori}</Lencana>
-                    {p.prioritas !== "biasa" ? (
-                      <Lencana
-                        nada={p.prioritas === "segera" ? "perhatian" : "emas"}
-                      >
-                        {p.prioritas}
+          <div className="space-y-4">
+            {utama ? (
+              <Kartu className="overflow-hidden border-navy-200">
+                <div className="h-1 w-full bg-gradient-to-r from-navy-700 via-emas-500 to-teal-500" />
+                <KartuIsi className="p-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Lencana nada="emas">Terbaru</Lencana>
+                    <Lencana>{LABEL_KATEGORI_PENGUMUMAN[utama.kategori] ?? utama.kategori}</Lencana>
+                    {utama.prioritas !== "biasa" ? (
+                      <Lencana nada={LABEL_PRIORITAS[utama.prioritas]?.nada}>
+                        {LABEL_PRIORITAS[utama.prioritas]?.label ?? utama.prioritas}
                       </Lencana>
                     ) : null}
                   </div>
-                </div>
-                <p className="mt-1 text-xs text-navy-400">
-                  {tanggalPanjang(p.tanggalMulai)}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-navy-700">{p.isi}</p>
-              </KartuIsi>
-            </Kartu>
-          ))
+                  <h2 className="mt-3 text-xl font-bold text-navy-800">{utama.judul}</h2>
+                  <p className="mt-1 text-xs text-navy-400">{tanggalPanjang(utama.tanggalMulai)}</p>
+                  {utama.ringkasan ? (
+                    <p className="mt-3 text-sm font-medium text-navy-700">{utama.ringkasan}</p>
+                  ) : null}
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-navy-600">
+                    {utama.isi}
+                  </p>
+                </KartuIsi>
+              </Kartu>
+            ) : null}
+
+            {lainnya.map((p) => (
+              <Kartu key={p.id} className="transition-shadow hover:shadow-md">
+                <KartuIsi>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <h2 className="font-semibold text-navy-800">{p.judul}</h2>
+                    <div className="flex flex-wrap gap-1">
+                      <Lencana>{LABEL_KATEGORI_PENGUMUMAN[p.kategori] ?? p.kategori}</Lencana>
+                      {p.prioritas !== "biasa" ? (
+                        <Lencana nada={LABEL_PRIORITAS[p.prioritas]?.nada}>
+                          {LABEL_PRIORITAS[p.prioritas]?.label ?? p.prioritas}
+                        </Lencana>
+                      ) : null}
+                    </div>
+                  </div>
+                  <p className="mt-1 text-xs text-navy-400">{tanggalPanjang(p.tanggalMulai)}</p>
+                  {p.ringkasan ? (
+                    <p className="mt-2 text-sm text-navy-600">{p.ringkasan}</p>
+                  ) : null}
+                  <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-navy-700">
+                    {p.isi}
+                  </p>
+                </KartuIsi>
+              </Kartu>
+            ))}
+          </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

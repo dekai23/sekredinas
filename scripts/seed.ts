@@ -18,7 +18,7 @@ import { resolve } from "node:path";
 import { hash } from "bcryptjs";
 import { eq } from "drizzle-orm";
 
-import { kategoriSuratBenih, pengumumanBenih } from "../lib/data/benih";
+import { agendaBenih, beritaBenih, kategoriSuratBenih, pengumumanBenih } from "../lib/data/benih";
 import { layananBenih } from "../lib/data/layanan";
 import { db, schema } from "../lib/db";
 
@@ -151,6 +151,39 @@ function eqKode(kode: string) {
   return eq(schema.unitKerja.kode, kode);
 }
 
+/**
+ * "Pemerintah Kabupaten Yahukimo" BUKAN unit kerja, melainkan induk tertinggi.
+ * Fungsi ini memastikan baris unit bernama PEMKAB (bila pernah ada) dihapus,
+ * lalu menandai unit Badan (BKD) berada langsung di bawah Pemkab - hanya bila
+ * admin belum mengubahnya sendiri.
+ */
+async function seedPemerintahDaerah() {
+  const dihapus = await db
+    .delete(schema.unitKerja)
+    .where(eq(schema.unitKerja.kode, "PEMKAB"))
+    .returning({ id: schema.unitKerja.id });
+  if (dihapus.length > 0) {
+    console.log("[seed] unit PEMKAB (bukan unit kerja) dibersihkan.");
+  }
+
+  const bkd = await db
+    .select({
+      id: schema.unitKerja.id,
+      indukId: schema.unitKerja.indukId,
+      indukPemkab: schema.unitKerja.indukPemkab,
+    })
+    .from(schema.unitKerja)
+    .where(eq(schema.unitKerja.kode, "BKD"))
+    .limit(1);
+  if (bkd[0] && !bkd[0].indukPemkab && bkd[0].indukId === null) {
+    await db
+      .update(schema.unitKerja)
+      .set({ indukPemkab: true, updatedAt: new Date() })
+      .where(eq(schema.unitKerja.id, bkd[0].id));
+  }
+  console.log("[seed] induk tertinggi: Pemerintah Kabupaten Yahukimo (bukan unit kerja).");
+}
+
 /* ------------------------------------------------------------------ */
 /* 2. Pegawai + akun login                                            */
 /* ------------------------------------------------------------------ */
@@ -235,6 +268,20 @@ async function seedPengaturan() {
     ukuranKertas: instansi.ukuranKertas ?? "F4 (21,6 x 33 cm)",
     zonaWaktu: instansi.zonaWaktu ?? "Asia/Jayapura",
     namaAplikasi: "SekreDinas",
+    sosmedWhatsapp: process.env.NEXT_PUBLIC_SOSMED_WHATSAPP ?? "https://wa.me/6281234567890",
+    sosmedFacebook: process.env.NEXT_PUBLIC_SOSMED_FACEBOOK ?? "https://www.facebook.com/pemkabyahukimo",
+    sosmedInstagram: process.env.NEXT_PUBLIC_SOSMED_INSTAGRAM ?? "https://www.instagram.com/pemkabyahukimo",
+    sosmedX: process.env.NEXT_PUBLIC_SOSMED_X ?? "https://x.com/pemkabyahukimo",
+    sosmedYoutube: process.env.NEXT_PUBLIC_SOSMED_YOUTUBE ?? "https://www.youtube.com/@pemkabyahukimo",
+    berandaJudul: "Satu pintu informasi kepegawaian Kabupaten Yahukimo.",
+    berandaSubjudul:
+      "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo hadir dengan layanan informasi, berita kegiatan, dan agenda kepegawaian yang cepat, transparan, dan mudah diakses.",
+    berandaSambutanJudul: "Melayani ASN, membangun SDM Yahukimo yang unggul",
+    berandaSambutanIsi:
+      "Selamat datang di portal resmi Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo. Portal ini kami hadirkan sebagai wujud komitmen terhadap keterbukaan informasi dan peningkatan kualitas pelayanan kepegawaian.\n\nKami mengajak seluruh ASN di lingkungan Pemerintah Kabupaten Yahukimo untuk terus meningkatkan kompetensi, integritas, dan semangat pelayanan demi kesejahteraan masyarakat.",
+    berandaSambutanNama: "",
+    berandaSambutanJabatan: "",
+    berandaSambutanFoto: "",
     sandiAwalSeed: SANDI_AWAL,
   };
 
@@ -324,6 +371,85 @@ async function seedPengumuman() {
 
 /* ------------------------------------------------------------------ */
 
+/** Waktu WIT (UTC+9) dari offset hari + jam, dipakai untuk benih agenda. */
+function waktuWitSeed(offsetHari: number, jam: number): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetHari);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return new Date(`${y}-${m}-${day}T${String(jam).padStart(2, "0")}:00:00+09:00`);
+}
+
+async function idAdmin(): Promise<string | null> {
+  const admin = await db
+    .select({ id: schema.pegawai.id })
+    .from(schema.pegawai)
+    .where(eq(schema.pegawai.role, "admin"))
+    .limit(1);
+  return admin[0]?.id ?? null;
+}
+
+async function seedBerita() {
+  const dibuatOleh = await idAdmin();
+  if (!dibuatOleh) {
+    console.log("[seed] berita dilewati: belum ada akun admin.");
+    return;
+  }
+  let ditambah = 0;
+  for (const b of beritaBenih) {
+    const ada = await db
+      .select({ id: schema.berita.id })
+      .from(schema.berita)
+      .where(eq(schema.berita.slug, b.slug))
+      .limit(1);
+    if (ada.length > 0) continue;
+    const terbit = new Date();
+    terbit.setDate(terbit.getDate() - b.hariLalu);
+    await db.insert(schema.berita).values({
+      judul: b.judul,
+      slug: b.slug,
+      ringkasan: b.ringkasan,
+      isi: b.isi,
+      kategori: b.kategori,
+      publik: true,
+      tanggalTerbit: terbit,
+      createdBy: dibuatOleh,
+    });
+    ditambah += 1;
+  }
+  console.log(`[seed] berita: ${ditambah} ditambahkan (${beritaBenih.length} benih).`);
+}
+
+async function seedAgenda() {
+  const dibuatOleh = await idAdmin();
+  if (!dibuatOleh) {
+    console.log("[seed] agenda dilewati: belum ada akun admin.");
+    return;
+  }
+  let ditambah = 0;
+  for (const a of agendaBenih) {
+    const ada = await db
+      .select({ id: schema.agenda.id })
+      .from(schema.agenda)
+      .where(eq(schema.agenda.judul, a.judul))
+      .limit(1);
+    if (ada.length > 0) continue;
+    await db.insert(schema.agenda).values({
+      judul: a.judul,
+      deskripsi: a.deskripsi,
+      lokasi: a.lokasi,
+      jenis: a.jenis,
+      mulai: waktuWitSeed(a.hari, a.jamMulai),
+      selesai: waktuWitSeed(a.hari, a.jamSelesai),
+      publik: a.publik,
+      createdBy: dibuatOleh,
+    });
+    ditambah += 1;
+  }
+  console.log(`[seed] agenda: ${ditambah} ditambahkan (${agendaBenih.length} benih).`);
+}
+
 async function utama() {
   if (process.argv.includes("--hapus-pegawai")) {
     await db.delete(schema.pegawai);
@@ -331,11 +457,14 @@ async function utama() {
   }
 
   const idPerKode = await seedUnitKerja();
+  await seedPemerintahDaerah();
   await seedPegawai(idPerKode);
   await seedPengaturan();
   await seedKategoriSurat();
   await seedLayanan(idPerKode);
   await seedPengumuman();
+  await seedBerita();
+  await seedAgenda();
 
   console.log("[seed] selesai.");
   process.exit(0);

@@ -143,6 +143,42 @@ export function hitungHariKerja(mulai: Date, selesai: Date): number {
   return total;
 }
 
+/**
+ * Mengubah waktu lokal WIT (format `<input type="datetime-local">`, mis.
+ * `2026-09-29T14:30`) menjadi `Date` yang benar. WIT selalu UTC+9 tanpa
+ * penyesuaian musim, sehingga offset cukup ditambahkan tetap.
+ */
+export function waktuWit(lokal: string): Date {
+  const bersih = lokal.trim();
+  const denganDetik = /T\d{2}:\d{2}$/.test(bersih) ? `${bersih}:00` : bersih;
+  return new Date(`${denganDetik}+09:00`);
+}
+
+/** Awal hari (00:00 WIT) dari tanggal `YYYY-MM-DD`. */
+export function tanggalWit(tanggal: string): Date {
+  return new Date(`${tanggal.trim()}T00:00:00+09:00`);
+}
+
+/**
+ * Format `Date` menjadi waktu lokal WIT `YYYY-MM-DDTHH:mm` - nilai yang
+ * diterima `<input type="datetime-local">`.
+ */
+export function formatWaktuLokal(tanggal: Date | string): string {
+  const d = typeof tanggal === "string" ? new Date(tanggal) : tanggal;
+  if (Number.isNaN(d.getTime())) return "";
+  const bagian = new Intl.DateTimeFormat("en-CA", {
+    timeZone: ZONA_WAKTU,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).formatToParts(d);
+  const p = Object.fromEntries(bagian.map((x) => [x.type, x.value]));
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
 /** Nama berkas aman untuk disimpan di folder unggahan. */
 export function namaBerkasAman(namaAsli: string): string {
   const dasar = namaAsli
@@ -152,6 +188,22 @@ export function namaBerkasAman(namaAsli: string): string {
     .replace(/\s+/g, "-")
     .toLowerCase();
   return dasar.length > 0 ? dasar.slice(0, 120) : "berkas";
+}
+
+/**
+ * Membuat slug URL dari judul: "Bimtek Penyusunan SKP 2026" ->
+ * "bimtek-penyusunan-skp-2026". Dipakai untuk berita dan konten publik.
+ */
+export function buatSlug(judul: string): string {
+  return judul
+    .normalize("NFKD")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 180)
+    .replace(/^-|-$/g, "");
 }
 
 /** Inisial untuk avatar: "Theodorus Valentinus, S.Kom." -> "TV". */

@@ -9,6 +9,7 @@ import {
   date,
   index,
   integer,
+  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -159,6 +160,48 @@ export const inventaris = pgTable(
     uniqueIndex("inventaris_kode_key").on(t.kodeAset),
     index("inventaris_kategori_idx").on(t.kategori),
     index("inventaris_kondisi_idx").on(t.kondisi),
+  ],
+);
+
+/* ------------------------------ ABSENSI ------------------------------- */
+
+/** Status kehadiran harian ASN. */
+export const statusAbsensiEnum = pgEnum("status_absensi", [
+  "hadir",
+  "izin",
+  "sakit",
+  "cuti",
+  "dinas_luar",
+  "alpa",
+]);
+
+/**
+ * Catatan kehadiran (presensi) ASN harian. Satu pegawai hanya boleh memiliki
+ * satu catatan per tanggal (dijaga oleh unique index). Diakses hanya oleh
+ * Admin serta Kepala Sub Bagian Umum dan Kepegawaian (lib/auth/hak-akses.ts).
+ */
+export const absensi = pgTable(
+  "absensi",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    pegawaiId: uuid("pegawai_id")
+      .references(() => pegawai.id, { onDelete: "cascade" })
+      .notNull(),
+    tanggal: date("tanggal").notNull(),
+    jamMasuk: timestamp("jam_masuk", { withTimezone: true }),
+    jamPulang: timestamp("jam_pulang", { withTimezone: true }),
+    status: statusAbsensiEnum("status").notNull().default("hadir"),
+    keterangan: text("keterangan"),
+    dicatatOlehId: uuid("dicatat_oleh_id").references(() => pegawai.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex("absensi_pegawai_tanggal_key").on(t.pegawaiId, t.tanggal),
+    index("absensi_tanggal_idx").on(t.tanggal),
+    index("absensi_status_idx").on(t.status),
   ],
 );
 
@@ -317,6 +360,19 @@ export const inventarisRelations = relations(inventaris, ({ one }) => ({
   }),
 }));
 
+export const absensiRelations = relations(absensi, ({ one }) => ({
+  pegawai: one(pegawai, {
+    fields: [absensi.pegawaiId],
+    references: [pegawai.id],
+    relationName: "absensiPegawai",
+  }),
+  pencatat: one(pegawai, {
+    fields: [absensi.dicatatOlehId],
+    references: [pegawai.id],
+    relationName: "absensiPencatat",
+  }),
+}));
+
 export const notifikasiRelations = relations(notifikasi, ({ one }) => ({
   pengguna: one(pegawai, {
     fields: [notifikasi.userId],
@@ -338,5 +394,6 @@ export type Agenda = typeof agenda.$inferSelect;
 export type Pengumuman = typeof pengumuman.$inferSelect;
 export type Cuti = typeof cuti.$inferSelect;
 export type Inventaris = typeof inventaris.$inferSelect;
+export type Absensi = typeof absensi.$inferSelect;
 export type Berita = typeof berita.$inferSelect;
 export type Layanan = typeof layanan.$inferSelect;

@@ -1,0 +1,1 @@
+ALTER TABLE "unit_kerja" ADD COLUMN "induk_pemkab" boolean DEFAULT false NOT NULL;

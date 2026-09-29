@@ -22,6 +22,20 @@ export interface IdentitasInstansi {
   ukuranKertas: string;
   zonaWaktu: string;
   namaAplikasi: string;
+  /** Tautan sosial media (isi lengkap; kosong = tidak ditampilkan). */
+  sosmedWhatsapp: string;
+  sosmedFacebook: string;
+  sosmedInstagram: string;
+  sosmedX: string;
+  sosmedYoutube: string;
+  /* Teks beranda yang dapat diedit admin (kosong = pakai bawaan). */
+  berandaJudul: string;
+  berandaSubjudul: string;
+  berandaSambutanJudul: string;
+  berandaSambutanIsi: string;
+  berandaSambutanNama: string;
+  berandaSambutanJabatan: string;
+  berandaSambutanFoto: string;
 }
 
 const BAWAAN: IdentitasInstansi = {
@@ -34,6 +48,20 @@ const BAWAAN: IdentitasInstansi = {
   ukuranKertas: "F4 (21,6 x 33 cm)",
   zonaWaktu: "Asia/Jayapura",
   namaAplikasi: "SekreDinas",
+  sosmedWhatsapp: "",
+  sosmedFacebook: "",
+  sosmedInstagram: "",
+  sosmedX: "",
+  sosmedYoutube: "",
+  berandaJudul: "Satu pintu informasi kepegawaian Kabupaten Yahukimo.",
+  berandaSubjudul:
+    "Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo hadir dengan layanan informasi, berita kegiatan, dan agenda kepegawaian yang cepat, transparan, dan mudah diakses.",
+  berandaSambutanJudul: "Melayani ASN, membangun SDM Yahukimo yang unggul",
+  berandaSambutanIsi:
+    "Selamat datang di portal resmi Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten Yahukimo. Portal ini kami hadirkan sebagai wujud komitmen terhadap keterbukaan informasi dan peningkatan kualitas pelayanan kepegawaian.\n\nKami mengajak seluruh ASN di lingkungan Pemerintah Kabupaten Yahukimo untuk terus meningkatkan kompetensi, integritas, dan semangat pelayanan demi kesejahteraan masyarakat.",
+  berandaSambutanNama: "",
+  berandaSambutanJabatan: "",
+  berandaSambutanFoto: "",
 };
 
 export async function identitasInstansi(): Promise<IdentitasInstansi> {
@@ -48,6 +76,18 @@ export async function identitasInstansi(): Promise<IdentitasInstansi> {
     ukuranKertas: p.ukuranKertas || BAWAAN.ukuranKertas,
     zonaWaktu: p.zonaWaktu || BAWAAN.zonaWaktu,
     namaAplikasi: p.namaAplikasi || BAWAAN.namaAplikasi,
+    sosmedWhatsapp: p.sosmedWhatsapp || BAWAAN.sosmedWhatsapp,
+    sosmedFacebook: p.sosmedFacebook || BAWAAN.sosmedFacebook,
+    sosmedInstagram: p.sosmedInstagram || BAWAAN.sosmedInstagram,
+    sosmedX: p.sosmedX || BAWAAN.sosmedX,
+    sosmedYoutube: p.sosmedYoutube || BAWAAN.sosmedYoutube,
+    berandaJudul: p.berandaJudul || BAWAAN.berandaJudul,
+    berandaSubjudul: p.berandaSubjudul || BAWAAN.berandaSubjudul,
+    berandaSambutanJudul: p.berandaSambutanJudul || BAWAAN.berandaSambutanJudul,
+    berandaSambutanIsi: p.berandaSambutanIsi || BAWAAN.berandaSambutanIsi,
+    berandaSambutanNama: p.berandaSambutanNama || BAWAAN.berandaSambutanNama,
+    berandaSambutanJabatan: p.berandaSambutanJabatan || BAWAAN.berandaSambutanJabatan,
+    berandaSambutanFoto: p.berandaSambutanFoto || BAWAAN.berandaSambutanFoto,
   };
 }
 

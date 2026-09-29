@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-import { adalahPimpinan, type Izin } from "@/lib/auth/hak-akses";
+import { adalahPengelolaAbsensi, adalahPimpinan, type Izin } from "@/lib/auth/hak-akses";
 import type { SesiPengguna } from "@/lib/auth/sesi";
 
 /** Nama ikon yang dipakai pada menu (lihat IKON_MENU di sidebar.tsx). */
@@ -11,7 +11,9 @@ export type NamaIkon =
   | "clipboard-list"
   | "archive"
   | "calendar-days"
+  | "clock"
   | "megaphone"
+  | "newspaper"
   | "package"
   | "file-text"
   | "gauge"
@@ -70,6 +72,7 @@ export const GRUP_MENU: GrupMenu[] = [
   {
     judul: "Kepegawaian",
     item: [
+      { label: "Cuti Saya", href: "/dashboard/cuti", ikon: "calendar-days", izin: "cuti.buat" },
       { label: "Agenda", href: "/dashboard/agenda", ikon: "calendar-days", izin: "agenda.lihat" },
       {
         label: "Pengumuman",
@@ -82,6 +85,12 @@ export const GRUP_MENU: GrupMenu[] = [
         href: "/dashboard/inventaris",
         ikon: "package",
         izin: "inventaris.lihat",
+      },
+      {
+        label: "Absensi",
+        href: "/dashboard/absensi",
+        ikon: "clock",
+        izin: "absensi.lihat",
       },
     ],
   },
@@ -106,6 +115,18 @@ export const GRUP_MENU: GrupMenu[] = [
     judul: "Administrasi",
     item: [
       { label: "Laporan", href: "/dashboard/laporan", ikon: "gauge", izin: "laporan.lihat" },
+      {
+        label: "Berita & Konten",
+        href: "/dashboard/berita",
+        ikon: "newspaper",
+        izin: "berita.kelola",
+      },
+      {
+        label: "Layanan Publik",
+        href: "/dashboard/layanan",
+        ikon: "file-text",
+        izin: "layanan.kelola",
+      },
       { label: "Pengguna", href: "/admin/pengguna", ikon: "users", izin: "pengguna.kelola" },
       {
         label: "Unit Kerja",
@@ -139,6 +160,8 @@ const IZIN_KHUSUS_ADMIN: Izin[] = [
   "arsip.kelola",
   "inventaris.kelola",
   "pengumuman.kelola",
+  "berita.kelola",
+  "layanan.kelola",
 ];
 
 /** Izin yang boleh dibuka oleh role pimpinan (dan admin). */
@@ -187,7 +210,12 @@ export function menuUntukSesi(sesi: SesiPengguna): GrupMenu[] {
   const admin = sesi.role === "admin";
   const pimpinan =
     !admin && (sesi.role === "pimpinan" || adalahPimpinan(sesi.peran));
-  const daftarIzin = admin ? IZIN_ADMIN : pimpinan ? IZIN_PIMPINAN : IZIN_PEGAWAI;
+  const daftarIzin = admin ? [...IZIN_ADMIN] : pimpinan ? [...IZIN_PIMPINAN] : [...IZIN_PEGAWAI];
+
+  // Absensi hanya untuk Admin & Kepala Sub Bagian Umum dan Kepegawaian.
+  if (adalahPengelolaAbsensi(sesi)) {
+    daftarIzin.push("absensi.lihat", "absensi.kelola");
+  }
 
   return GRUP_MENU.map((grup) => ({
     judul: grup.judul,

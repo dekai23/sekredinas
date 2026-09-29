@@ -1,0 +1,1 @@
+ALTER TYPE "public"."jenis_unit" ADD VALUE 'pemerintah';

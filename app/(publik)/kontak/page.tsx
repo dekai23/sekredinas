@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
-import { KopSurat } from "@/components/kop/kop-surat";
+import { GelombangNavy } from "@/components/publik/ilustrasi";
 import { Kartu, KartuIsi, KartuKepala, Lencana } from "@/components/ui/dasar";
 import { identitasInstansi } from "@/lib/data/instansi";
 
@@ -26,17 +26,15 @@ export default async function HalamanKontak() {
 
   return (
     <div>
-      <section className="border-b border-navy-100 bg-navy-50/60">
-        <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-          <KopSurat />
-          <div className="mt-8">
-            <Lencana nada="emas">Kontak</Lencana>
-            <h1 className="mt-3 text-3xl font-bold text-navy-800">Hubungi Kami</h1>
-            <p className="mt-2 text-sm text-navy-600">
-              Saran, masukan, atau pertanyaan mengenai layanan kepegawaian dapat
-              disampaikan melalui alamat berikut.
-            </p>
-          </div>
+      <section className="relative overflow-hidden">
+        <GelombangNavy className="absolute inset-0" />
+        <div className="relative mx-auto max-w-4xl px-4 py-12 sm:px-6">
+          <Lencana nada="emas">Kontak</Lencana>
+          <h1 className="mt-3 text-3xl font-bold text-white">Hubungi Kami</h1>
+          <p className="mt-2 text-sm text-navy-100">
+            Saran, masukan, atau pertanyaan mengenai layanan kepegawaian dapat
+            disampaikan melalui alamat berikut.
+          </p>
         </div>
       </section>
 
