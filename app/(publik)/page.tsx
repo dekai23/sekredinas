@@ -10,13 +10,15 @@ import {
   Images,
   MapPin,
   Megaphone,
+  MessageCircle,
   Search,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 
 import { BannerPromo } from "@/components/publik/banner-promo";
-import { AbstrakAparatur, PolaGrid } from "@/components/publik/ilustrasi";
+import { HeroFoto } from "@/components/publik/hero-foto";
+import { PolaGrid } from "@/components/publik/ilustrasi";
 import { SampulBerita } from "@/components/publik/sampul";
 import { Kartu, KartuIsi, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
@@ -136,17 +138,13 @@ export default async function Beranda() {
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-navy-950 text-white">
         <div className="absolute inset-0" aria-hidden>
-          <img
-            src="https://picsum.photos/seed/yahukimo-kantor/1920/1000"
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover opacity-25"
-          />
-          <AbstrakAparatur className="absolute right-[-6%] top-1/2 hidden w-[62%] max-w-3xl -translate-y-1/2 opacity-30 lg:block" />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/95 to-navy-900/40" />
-          <PolaGrid className="text-white/25" />
+          <HeroFoto />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/80 to-navy-900/40" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950 to-transparent" />
+          <PolaGrid className="text-white/15" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-14 sm:px-6 lg:pb-24 lg:pt-20">
+        <div className="relative mx-auto max-w-6xl px-4 pb-28 pt-20 sm:px-6 lg:pb-32 lg:pt-28">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-emas-200 ring-1 ring-white/20">
             Portal Resmi Kepegawaian
           </span>
@@ -617,6 +615,19 @@ export default async function Beranda() {
           </div>
         </div>
       </section>
+
+      {/* Tombol bantuan melayang (WhatsApp) */}
+      {instansi.sosmedWhatsapp ? (
+        <a
+          href={instansi.sosmedWhatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Hubungi via WhatsApp"
+          className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg ring-4 ring-emerald-500/20 transition-colors hover:bg-emerald-600"
+        >
+          <MessageCircle className="h-6 w-6" aria-hidden />
+        </a>
+      ) : null}
     </div>
   );
 }
