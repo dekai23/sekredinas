@@ -136,6 +136,11 @@ export default async function Beranda() {
       {/* ---------------- HERO ---------------- */}
       <section className="relative overflow-hidden bg-navy-950 text-white">
         <div className="absolute inset-0" aria-hidden>
+          <img
+            src="https://picsum.photos/seed/yahukimo-kantor/1920/1000"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover opacity-25"
+          />
           <AbstrakAparatur className="absolute right-[-6%] top-1/2 hidden w-[62%] max-w-3xl -translate-y-1/2 opacity-30 lg:block" />
           <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/95 to-navy-900/40" />
           <PolaGrid className="text-white/25" />

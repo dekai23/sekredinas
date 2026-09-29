@@ -21,6 +21,7 @@ interface Banner {
   cta: string;
   dari: string;
   ke: string;
+  gambar: string;
   Ikon: typeof FileText;
 }
 
@@ -34,6 +35,7 @@ const BANNER: Banner[] = [
     cta: "Lihat layanan",
     dari: "from-navy-800",
     ke: "to-navy-950",
+    gambar: "https://picsum.photos/seed/bkpsdm-pangkat/1200/500",
     Ikon: IdCard,
   },
   {
@@ -44,6 +46,7 @@ const BANNER: Banner[] = [
     cta: "Baca informasi",
     dari: "from-teal-600",
     ke: "to-navy-800",
+    gambar: "https://picsum.photos/seed/bkpsdm-aplikasi/1200/500",
     Ikon: FileText,
   },
   {
@@ -54,6 +57,7 @@ const BANNER: Banner[] = [
     cta: "Lihat agenda",
     dari: "from-emas-600",
     ke: "to-navy-900",
+    gambar: "https://picsum.photos/seed/bkpsdm-diklat/1200/500",
     Ikon: GraduationCap,
   },
 ];
@@ -93,6 +97,16 @@ export function BannerPromo() {
               )}
               aria-hidden={i !== aktif}
             >
+              <img
+                src={b.gambar}
+                alt=""
+                aria-hidden
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <span
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-r from-navy-950/90 via-navy-900/70 to-navy-900/30"
+              />
               <span
                 aria-hidden
                 className="absolute inset-0 opacity-20"
