@@ -450,21 +450,28 @@ async function seedAgenda() {
   console.log(`[seed] agenda: ${ditambah} ditambahkan (${agendaBenih.length} benih).`);
 }
 
-async function utama() {
-  if (process.argv.includes("--hapus-pegawai")) {
+export interface OpsiSeed {
+  hapusPegawai?: boolean;
+  paksa?: boolean;
+}
+
+/**
+ * Mengisi data. TIDAK memanggil process.exit, sehingga aman dipanggil dari
+ * server (mis. route /api/setup) maupun sebagai skrip CLI.
+ * Bila database sudah berisi data, seeding dilewati (kecuali `paksa`).
+ */
+export async function jalankanSeed(opsi: OpsiSeed = {}): Promise<void> {
+  if (opsi.hapusPegawai) {
     await db.delete(schema.pegawai);
     console.log("[seed] tabel pegawai dikosongkan.");
   }
 
-  // Amankan dari menimpa data: bila database sudah pernah diisi, lewati.
-  // Berguna saat seed dijalankan otomatis pada setiap build (mis. Netlify).
-  // Gunakan `--paksa` untuk memaksa seed meski data sudah ada.
-  if (!process.argv.includes("--paksa") && !process.argv.includes("--hapus-pegawai")) {
+  if (!opsi.paksa && !opsi.hapusPegawai) {
     try {
       const ada = await db.select({ id: schema.pegawai.id }).from(schema.pegawai).limit(1);
       if (ada.length > 0) {
         console.log("[seed] database sudah berisi data - seeding dilewati.");
-        process.exit(0);
+        return;
       }
     } catch {
       // Tabel belum ada (database baru) -> lanjutkan seeding.
@@ -482,13 +489,24 @@ async function utama() {
   await seedAgenda();
 
   console.log("[seed] selesai.");
+}
+
+async function utama() {
+  await jalankanSeed({
+    hapusPegawai: process.argv.includes("--hapus-pegawai"),
+    paksa: process.argv.includes("--paksa"),
+  });
   process.exit(0);
 }
 
-utama().catch((galat: unknown) => {
-  const e = galat as { message?: string; cause?: unknown; stack?: string };
-  console.error("[seed] GAGAL:", e.message ?? galat);
-  if (e.cause) console.error("[seed] penyebab:", e.cause);
-  if (e.stack) console.error(e.stack);
-  process.exit(1);
-});
+// Hanya dijalankan otomatis bila dipanggil langsung sebagai skrip CLI
+// (mis. `npm run db:seed`), bukan saat diimpor oleh route server.
+if (/seed\.(ts|js)$/.test(process.argv[1] ?? "")) {
+  utama().catch((galat: unknown) => {
+    const e = galat as { message?: string; cause?: unknown; stack?: string };
+    console.error("[seed] GAGAL:", e.message ?? galat);
+    if (e.cause) console.error("[seed] penyebab:", e.cause);
+    if (e.stack) console.error(e.stack);
+    process.exit(1);
+  });
+}
