@@ -35,6 +35,9 @@ uploads/
 .database/
 *.pglite
 
+# --- Backup lokal (salinan aman, jangan ikut versi) ---
+backup/
+
 # --- Berkas uji & sementara ---
 .token-uji.txt
 uji-*.ts

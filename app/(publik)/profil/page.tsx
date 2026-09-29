@@ -6,6 +6,7 @@ import { GelombangNavy } from "@/components/publik/ilustrasi";
 import { Kartu, KartuIsi, KartuKepala, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { identitasInstansi } from "@/lib/data/instansi";
+import { TUGAS_FUNGSI } from "@/lib/data/profil";
 
 export const revalidate = 600;
 
@@ -15,17 +16,6 @@ export const metadata: Metadata = {
     "Profil, tugas dan fungsi, serta struktur organisasi Badan Kepegawaian dan " +
     "Pengembangan Sumber Daya Manusia Kabupaten Yahukimo.",
 };
-
-const TUGAS_FUNGSI = [
-  "Menyusun kebijakan di bidang kepegawaian dan pengembangan sumber daya manusia",
-  "Melaksanakan administrasi kepegawaian, penggajian, dan tunjangan",
-  "Menyelenggarakan seleksi, pengangkatan, promosi, dan mutasi ASN",
-  "Menyelenggarakan kenaikan pangkat dan pengangkatan",
-  "Menyelenggarakan administrasi pensiun dan hak-hak pegawai",
-  "Melaksanakan pembinaan dan pengembangan kompetensi ASN",
-  "Menyelenggarakan informasi kepegawaian serta pelayanan publik",
-  "Melaksanakan tugas lain yang diperintahkan Bupati",
-];
 
 /** Halaman profil instansi: identitas, tugas fungsi, dan struktur organisasi. */
 export default async function HalamanProfil() {
