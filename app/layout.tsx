@@ -9,27 +9,26 @@ const BERANDA = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(BERANDA),
   title: {
-    default:
-      "SekreDinas — Badan Kepegawaian dan Pengembangan SDM Kabupaten Yahukimo",
-    template: "%s — SekreDinas BKPSDM Yahukimo",
+    default: "BKPSDM Yahukimo — Badan Kepegawaian dan Pengembangan SDM",
+    template: "%s — BKPSDM Yahukimo",
   },
   description:
     "Portal informasi dan sistem manajemen persuratan, disposisi, arsip digital, " +
     "serta kepegawaian Badan Kepegawaian dan Pengembangan Sumber Daya Manusia " +
     "Kabupaten Yahukimo.",
-  applicationName: "SekreDinas",
+  applicationName: "BKPSDM Yahukimo",
   authors: [{ name: "BKPSDM Kabupaten Yahukimo" }],
   openGraph: {
     type: "website",
     locale: "id_ID",
-    siteName: "SekreDinas BKPSDM Yahukimo",
+    siteName: "BKPSDM Yahukimo",
     images: ["/logo-yahukimo.png"],
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#16305c",
+  themeColor: "#115b97",
   width: "device-width",
   initialScale: 1,
 };

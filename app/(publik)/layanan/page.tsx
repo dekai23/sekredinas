@@ -3,7 +3,7 @@ import { asc, eq } from "drizzle-orm";
 import { ArrowRight, Clock, FileText } from "lucide-react";
 import Link from "next/link";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { KepalaHalaman } from "@/components/publik/kepala-halaman";
 import { Kartu, KartuIsi, KeadaanKosong, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 
@@ -34,17 +34,11 @@ export default async function HalamanLayanan() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <Lencana nada="emas">Layanan</Lencana>
-          <h1 className="mt-3 text-3xl font-bold text-white">Layanan Kepegawaian</h1>
-          <p className="mt-2 max-w-2xl text-sm text-navy-100">
-            Informasi syarat, alur, dan perkiraan waktu penyelesaian pengajuan. Pengajuan
-            dilakukan langsung di kantor Bagian Kepegawaian.
-          </p>
-        </div>
-      </section>
+      <KepalaHalaman
+        label="Layanan"
+        judul="Layanan Kepegawaian"
+        deskripsi="Informasi syarat, alur, dan perkiraan waktu penyelesaian pengajuan. Pengajuan dilakukan langsung di kantor Bagian Kepegawaian."
+      />
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {daftar.length === 0 ? (
@@ -59,9 +53,9 @@ export default async function HalamanLayanan() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {daftar.map((l) => (
               <Link key={l.id} href={`/layanan/${l.slug}`} className="group">
-                <Kartu className="flex h-full flex-col transition-all duration-200 group-hover:-translate-y-1 group-hover:border-emas-300 group-hover:shadow-md">
+                <Kartu className="flex h-full flex-col transition-all duration-200 group-hover:-translate-y-1 group-hover:border-biru-300 group-hover:shadow-md">
                   <KartuIsi className="flex flex-1 flex-col">
-                    <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+                    <span className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-biru-50 text-biru-600">
                       <FileText className="h-5 w-5" aria-hidden />
                     </span>
                     <h2 className="font-semibold text-navy-800">{l.judul}</h2>
@@ -77,7 +71,7 @@ export default async function HalamanLayanan() {
                       ) : null}
                       {l.unit ? <Lencana>{l.unit}</Lencana> : null}
                     </div>
-                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-teal-700 group-hover:text-teal-800">
+                    <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-biru-600 group-hover:text-biru-700">
                       Selengkapnya <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                     </span>
                   </KartuIsi>

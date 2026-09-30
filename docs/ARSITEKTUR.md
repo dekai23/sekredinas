@@ -1,6 +1,6 @@
 # Arsitektur: Satu Sistem, Dua Zona (Portal Publik + Aplikasi Internal)
 
-Dokumen ini menetapkan pola arsitektur SekreDinas BKPSDM Kabupaten Yahukimo:
+Dokumen ini menetapkan pola arsitektur BKPSDM Yahukimo:
 **satu basis kode/aplikasi** yang melayani **dua audiens berbeda** dengan batas keamanan yang tegas.
 
 ---

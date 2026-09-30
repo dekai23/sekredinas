@@ -1,4 +1,4 @@
-# Konfigurasi deploy Netlify untuk SekreDinas (Next.js App Router).
+# Konfigurasi deploy Netlify untuk BKPSDM Yahukimo (Next.js App Router).
 #
 # Catatan penting:
 #  - Netlify bersifat serverless, sehingga PGlite (database berbasis disk)

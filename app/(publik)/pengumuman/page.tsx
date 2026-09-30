@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { and, desc, eq, gte, isNull, lte, or } from "drizzle-orm";
 import { Megaphone } from "lucide-react";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { KepalaHalaman } from "@/components/publik/kepala-halaman";
 import { Kartu, KartuIsi, KeadaanKosong, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { LABEL_KATEGORI_PENGUMUMAN, LABEL_PRIORITAS } from "@/lib/label";
@@ -47,16 +47,11 @@ export default async function HalamanPengumuman() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <Lencana nada="emas">Informasi</Lencana>
-          <h1 className="mt-3 text-3xl font-bold text-white">Pengumuman</h1>
-          <p className="mt-2 max-w-2xl text-sm text-navy-100">
-            Pengumuman resmi instansi yang dapat dilihat masyarakat umum.
-          </p>
-        </div>
-      </section>
+      <KepalaHalaman
+        label="Pengumuman"
+        judul="Pengumuman"
+        deskripsi="Pengumuman resmi instansi yang dapat dilihat masyarakat umum."
+      />
 
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         {daftar.length === 0 ? (
@@ -71,7 +66,7 @@ export default async function HalamanPengumuman() {
           <div className="space-y-4">
             {utama ? (
               <Kartu className="overflow-hidden border-navy-200">
-                <div className="h-1 w-full bg-gradient-to-r from-navy-700 via-emas-500 to-teal-500" />
+                <div className="h-1 w-full bg-gradient-to-r from-biru-600 via-biru-400 to-emas-400" />
                 <KartuIsi className="p-6">
                   <div className="flex flex-wrap items-center gap-2">
                     <Lencana nada="emas">Terbaru</Lencana>

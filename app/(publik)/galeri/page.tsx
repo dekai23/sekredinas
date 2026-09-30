@@ -3,9 +3,9 @@ import { and, desc, eq, inArray } from "drizzle-orm";
 import { Images } from "lucide-react";
 import Link from "next/link";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { KepalaHalaman } from "@/components/publik/kepala-halaman";
 import { SampulBerita } from "@/components/publik/sampul";
-import { Kartu, KartuIsi, KeadaanKosong, Lencana } from "@/components/ui/dasar";
+import { Kartu, KartuIsi, KeadaanKosong } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { tanggalPanjang } from "@/lib/utils";
 
@@ -41,17 +41,11 @@ export default async function HalamanGaleri() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <Lencana nada="emas">Dokumentasi</Lencana>
-          <h1 className="mt-3 text-3xl font-bold text-white">Galeri Kegiatan</h1>
-          <p className="mt-2 max-w-2xl text-sm text-navy-100">
-            Dokumentasi kegiatan, pelatihan, dan momen penting lingkungan BKPSDM Kabupaten
-            Yahukimo.
-          </p>
-        </div>
-      </section>
+      <KepalaHalaman
+        label="Galeri"
+        judul="Galeri Kegiatan"
+        deskripsi="Dokumentasi kegiatan, pelatihan, dan momen penting lingkungan BKPSDM Kabupaten Yahukimo."
+      />
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {daftar.length === 0 ? (

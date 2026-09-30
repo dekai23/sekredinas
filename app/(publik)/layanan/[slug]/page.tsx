@@ -63,7 +63,7 @@ export default async function DetailLayanan({ params }: Props) {
 
   return (
     <div>
-      <section className="border-b border-navy-100 bg-navy-50/60">
+      <section className="border-b border-biru-100 bg-biru-50/50">
         <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
           <Link
             href="/layanan"
@@ -128,7 +128,7 @@ export default async function DetailLayanan({ params }: Props) {
                 <ol className="space-y-3">
                   {alur.map((a, i) => (
                     <li key={a} className="flex items-start gap-3 text-sm text-navy-700">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-navy-700 font-mono text-xs font-bold text-white">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-biru-600 font-mono text-xs font-bold text-white">
                         {i + 1}
                       </span>
                       {a}

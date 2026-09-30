@@ -63,8 +63,8 @@ export function Sidebar({ menu, sesi }: { menu: GrupMenu[]; sesi: SesiPengguna }
           className="h-10 w-10 rounded-lg bg-white/95 p-1 object-contain"
         />
         <div className="min-w-0">
-          <p className="truncate text-sm font-bold text-white">SekreDinas</p>
-          <p className="truncate text-[11px] text-navy-200">BKPSDM Kab. Yahukimo</p>
+          <p className="truncate text-sm font-bold text-white">BKPSDM Yahukimo</p>
+          <p className="truncate text-[11px] text-navy-200">Kabupaten Yahukimo</p>
         </div>
         <button
           type="button"

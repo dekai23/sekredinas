@@ -41,10 +41,10 @@ export interface PengumumanBenih {
 
 export const pengumumanBenih: PengumumanBenih[] = [
   {
-    judul: "Selamat datang memakai aplikasi SekreDinas",
+    judul: "Selamat datang di aplikasi BKPSDM Yahukimo",
     ringkasan:
       "Aplikasi persuratan, disposisi, arsip, dan kepegawaian BKPSDM mulai digunakan.",
-    isi: "Aplikasi SekreDinas digunakan untuk mengelola surat masuk dan keluar, disposisi berantai, arsip digital, agenda, pengumuman, serta pengajuan cuti. Setiap pegawai melakukan login memakai alamat email kantor, lalu mengganti sandi awal pada kunjungan pertama. Bila menemukan kendala, hubungi admin sistem.",
+    isi: "Aplikasi BKPSDM Yahukimo digunakan untuk mengelola surat masuk dan keluar, disposisi berantai, arsip digital, agenda, pengumuman, serta pengajuan cuti. Setiap pegawai melakukan login memakai alamat email kantor, lalu mengganti sandi awal pada kunjungan pertama. Bila menemukan kendala, hubungi admin sistem.",
     kategori: "pengumuman",
     internal: true,
     publik: true,
@@ -112,11 +112,11 @@ export const beritaBenih: BeritaBenih[] = [
     hariLalu: 14,
   },
   {
-    judul: "Sosialisasi Aplikasi SekreDinas kepada Seluruh Perangkat Daerah",
-    slug: "sosialisasi-aplikasi-sekredinas",
+    judul: "Sosialisasi Aplikasi BKPSDM Yahukimo kepada Seluruh Perangkat Daerah",
+    slug: "sosialisasi-aplikasi-bkpsdm-yahukimo",
     ringkasan:
-      "SekreDinas, sistem persuratan dan administrasi kepegawaian digital, disosialisasikan agar seluruh perangkat daerah beralih dari agenda manual.",
-    isi: "BKPSDM memperkenalkan aplikasi SekreDinas, sebuah sistem terintegrasi untuk pengelolaan persuratan, disposisi, arsip digital, agenda, pengumuman, dan administrasi kepegawaian. Sosialisasi dilakukan kepada operator dari seluruh perangkat daerah.\n\nAplikasi ini diharapkan mengubah alur kerja sekretariat dari tumpukan kertas dan buku agenda manual menjadi sistem yang cepat, aman, dan tertelusuri. Registrasi surat, disposisi pimpinan, hingga pencarian arsip kini dapat dilakukan dalam satu platform.\n\nPeserta mendapatkan akun, pelatihan penggunaan, serta pendampingan teknis selama masa transisi. Dukungan berkelanjutan akan terus diberikan oleh tim pengelola aplikasi.",
+      "Aplikasi BKPSDM Yahukimo, sistem persuratan dan administrasi kepegawaian digital, disosialisasikan agar seluruh perangkat daerah beralih dari agenda manual.",
+    isi: "Pemerintah Kabupaten Yahukimo memperkenalkan aplikasi BKPSDM Yahukimo, sebuah sistem terintegrasi untuk pengelolaan persuratan, disposisi, arsip digital, agenda, pengumuman, dan administrasi kepegawaian. Sosialisasi dilakukan kepada operator dari seluruh perangkat daerah.\n\nAplikasi ini diharapkan mengubah alur kerja sekretariat dari tumpukan kertas dan buku agenda manual menjadi sistem yang cepat, aman, dan tertelusuri. Registrasi surat, disposisi pimpinan, hingga pencarian arsip kini dapat dilakukan dalam satu platform.\n\nPeserta mendapatkan akun, pelatihan penggunaan, serta pendampingan teknis selama masa transisi. Dukungan berkelanjutan akan terus diberikan oleh tim pengelola aplikasi.",
     kategori: "berita",
     hariLalu: 20,
   },

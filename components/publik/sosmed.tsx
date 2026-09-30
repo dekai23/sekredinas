@@ -48,7 +48,7 @@ export function DaftarSosmed({ url, className }: { url: UrlSosmed; className?: s
             rel="noopener noreferrer"
             aria-label={d.label}
             title={d.label}
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-navy-100 transition-colors hover:bg-emas-500 hover:text-navy-950"
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-biru-100 transition-colors hover:bg-biru-500 hover:text-white"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
               <path d={PATH[d.kunci]} />

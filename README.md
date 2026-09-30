@@ -1,4 +1,4 @@
-﻿# SekreDinas â€” Sistem Informasi BKPSDM Kabupaten Yahukimo
+﻿# BKPSDM Yahukimo â€” Sistem Informasi Kepegawaian Kabupaten Yahukimo
 
 Repositori kerja pembangunan **sistem aplikasi + sistem informasi kantor** Badan Kepegawaian dan
 Pengembangan Sumber Daya Manusia (BKPSDM) Kabupaten Yahukimo, meliputi persuratan, disposisi,

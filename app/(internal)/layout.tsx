@@ -23,8 +23,8 @@ export default async function LayoutInternal({
         <Topbar sesi={sesi} />
         <main className="flex-1 px-4 py-5 sm:px-6 lg:px-8">{children}</main>
         <footer className="border-t border-navy-100 px-6 py-4 text-xs text-navy-500">
-          SekreDinas · Badan Kepegawaian dan Pengembangan Sumber Daya Manusia Kabupaten
-          Yahukimo
+          BKPSDM Yahukimo · Badan Kepegawaian dan Pengembangan Sumber Daya Manusia
+          Kabupaten Yahukimo
         </footer>
       </div>
     </div>

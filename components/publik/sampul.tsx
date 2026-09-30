@@ -27,38 +27,44 @@ export interface KonfigurasiSampul {
 export const SAMPUL_KATEGORI: Record<string, KonfigurasiSampul> = {
   berita: {
     label: "Berita",
-    dari: "from-navy-800",
-    ke: "to-navy-950",
+    dari: "from-biru-700",
+    ke: "to-biru-950",
     ikon: Newspaper,
   },
   kegiatan: {
     label: "Kegiatan",
-    dari: "from-teal-600",
-    ke: "to-navy-800",
+    dari: "from-biru-500",
+    ke: "to-biru-800",
     ikon: Images,
   },
   artikel: {
     label: "Artikel",
-    dari: "from-navy-700",
+    dari: "from-biru-600",
     ke: "to-teal-700",
     ikon: BookOpen,
   },
   diklat: {
     label: "Diklat",
-    dari: "from-emas-600",
-    ke: "to-emas-700",
+    dari: "from-biru-400",
+    ke: "to-biru-700",
     ikon: GraduationCap,
   },
   prestasi: {
     label: "Prestasi",
     dari: "from-emas-500",
-    ke: "to-navy-800",
+    ke: "to-biru-800",
     ikon: Award,
   },
 };
 
 export function sampulKategori(kategori: string | null | undefined): KonfigurasiSampul {
   return SAMPUL_KATEGORI[kategori ?? ""] ?? SAMPUL_KATEGORI.kegiatan;
+}
+
+/** URL gambar sampul: gambar asli bila ada, atau foto placeholder deterministik. */
+export function urlSampul(judul: string, gambarUrl?: string | null): string {
+  if (gambarUrl && /^https?:\/\//i.test(gambarUrl)) return gambarUrl;
+  return `https://picsum.photos/seed/${encodeURIComponent(judul).slice(0, 60)}/900/600`;
 }
 
 export function SampulBerita({
@@ -73,12 +79,8 @@ export function SampulBerita({
   className?: string;
 }) {
   const konfigurasi = sampulKategori(kategori);
-  const apakahUrl = Boolean(gambarUrl && /^https?:\/\//i.test(gambarUrl));
   const Ikon = konfigurasi.ikon;
-  // Bila tidak ada gambar asli, pakai foto placeholder dari internet.
-  const url = apakahUrl
-    ? (gambarUrl as string)
-    : `https://picsum.photos/seed/${encodeURIComponent(judul).slice(0, 60)}/900/600`;
+  const url = urlSampul(judul, gambarUrl);
 
   return (
     <span
@@ -99,7 +101,7 @@ export function SampulBerita({
       />
       <span
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/30 to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-biru-950/80 via-biru-950/30 to-transparent"
       />
       <span className="relative flex flex-col items-center gap-2 text-white">
         <Ikon className="h-9 w-9 opacity-90" aria-hidden />

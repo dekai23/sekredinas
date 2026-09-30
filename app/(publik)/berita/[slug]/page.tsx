@@ -77,7 +77,7 @@ export default async function DetailBerita({ params }: Props) {
 
   return (
     <div>
-      <section className="border-b border-navy-100 bg-navy-50/60">
+      <section className="border-b border-biru-100 bg-biru-50/50">
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
           <Link
             href="/berita"
@@ -120,10 +120,10 @@ export default async function DetailBerita({ params }: Props) {
           ))}
         </div>
 
-        <div className="mt-8 rounded-xl border border-navy-100 bg-navy-50 px-5 py-4 text-sm text-navy-600">
+        <div className="mt-8 rounded-xl border border-biru-100 bg-biru-50 px-5 py-4 text-sm text-navy-600">
           Kategori: <strong className="text-navy-800">{konfigurasi.label}</strong>. Ikuti kanal
           resmi {""}
-          <Link href="/" className="font-semibold text-teal-700 hover:text-teal-800">
+          <Link href="/" className="font-semibold text-biru-600 hover:text-biru-700">
             portal BKPSDM Yahukimo
           </Link>{" "}
           untuk informasi kepegawaian terbaru.
@@ -131,7 +131,7 @@ export default async function DetailBerita({ params }: Props) {
       </article>
 
       {terkait.length > 0 ? (
-        <section className="border-t border-navy-100 bg-navy-50/60">
+        <section className="border-t border-biru-100 bg-biru-50/50">
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
             <h2 className="mb-4 text-xl font-bold text-navy-800">Berita terkait</h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

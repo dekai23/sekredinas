@@ -3,7 +3,7 @@ import { and, asc, eq, gte, lt } from "drizzle-orm";
 import { CalendarDays, ChevronLeft, ChevronRight, MapPin } from "lucide-react";
 import Link from "next/link";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { KepalaHalaman } from "@/components/publik/kepala-halaman";
 import { Kartu, KartuIsi, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { bangunKalender, geserBulan, labelBulan, NAMA_HARI } from "@/lib/kalender";
@@ -66,16 +66,11 @@ export default async function HalamanAgendaPublik({ searchParams }: Props) {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <Lencana nada="emas">Agenda</Lencana>
-          <h1 className="mt-3 text-3xl font-bold text-white">Agenda Kegiatan Publik</h1>
-          <p className="mt-2 max-w-2xl text-sm text-navy-100">
-            Jadwal kegiatan yang terbuka untuk masyarakat dan mitra instansi.
-          </p>
-        </div>
-      </section>
+      <KepalaHalaman
+        label="Agenda"
+        judul="Agenda Kegiatan Publik"
+        deskripsi="Jadwal kegiatan yang terbuka untuk masyarakat dan mitra instansi."
+      />
 
       <section className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3">
         <Kartu className="lg:col-span-2">
@@ -114,8 +109,8 @@ export default async function HalamanAgendaPublik({ searchParams }: Props) {
                     className={
                       "flex min-h-[72px] flex-col rounded-lg border p-1.5 text-left transition-colors " +
                       (dipilih
-                        ? "border-navy-600 bg-navy-700 text-white"
-                        : "border-navy-100 hover:border-navy-300 hover:bg-navy-50")
+                        ? "border-biru-600 bg-biru-600 text-white"
+                        : "border-navy-100 hover:border-biru-300 hover:bg-biru-50")
                     }
                   >
                     <span
@@ -132,7 +127,7 @@ export default async function HalamanAgendaPublik({ searchParams }: Props) {
                           key={a.id}
                           className={
                             "truncate rounded px-1 text-[10px] font-medium " +
-                            (dipilih ? "bg-white/20 text-white" : "bg-emas-100 text-emas-700")
+                            (dipilih ? "bg-white/20 text-white" : "bg-biru-100 text-biru-700")
                           }
                         >
                           {a.judul}
@@ -194,7 +189,7 @@ export default async function HalamanAgendaPublik({ searchParams }: Props) {
             {semuaAgendaBulan.map((a) => (
               <Kartu key={a.id} className="transition-shadow hover:shadow-md">
                 <KartuIsi>
-                  <p className="text-xs font-semibold text-teal-600">{tanggalPanjang(a.mulai)}</p>
+                  <p className="text-xs font-semibold text-biru-600">{tanggalPanjang(a.mulai)}</p>
                   <h3 className="mt-1 font-semibold text-navy-800">{a.judul}</h3>
                   {a.lokasi ? (
                     <p className="mt-1 flex items-center gap-1 text-xs text-navy-500">

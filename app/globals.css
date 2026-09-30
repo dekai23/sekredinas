@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ==================================================================
-   SekreDinas - token desain (PRD.txt Bab 4)
+   BKPSDM Yahukimo - token desain (PRD.txt Bab 4)
    Warna resmi: Primary Navy HSL(218 68% 22%), Secondary Emas
    HSL(42 92% 55%), Accent Teal HSL(190 85% 42%).
    Font: Plus Jakarta Sans (self-hosted), JetBrains Mono untuk nomor.
@@ -25,6 +25,19 @@
   --color-navy-800: hsl(218 66% 18%);
   --color-navy-900: hsl(219 64% 14%);
   --color-navy-950: hsl(220 62% 9%);
+
+  /* Brand portal publik - biru muda ala jabarprov (terang, bersih) */
+  --color-biru-50: hsl(208 100% 97%);
+  --color-biru-100: hsl(207 95% 93%);
+  --color-biru-200: hsl(206 90% 85%);
+  --color-biru-300: hsl(205 85% 73%);
+  --color-biru-400: hsl(204 82% 62%);
+  --color-biru-500: hsl(203 80% 50%);
+  --color-biru-600: hsl(205 82% 41%);
+  --color-biru-700: hsl(207 80% 33%);
+  --color-biru-800: hsl(209 76% 25%);
+  --color-biru-900: hsl(211 72% 19%);
+  --color-biru-950: hsl(213 70% 12%);
 
   /* Secondary - Emas */
   --color-emas-50: hsl(45 90% 96%);

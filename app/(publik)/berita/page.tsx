@@ -3,7 +3,7 @@ import { and, count, desc, eq, ilike, or, type SQL } from "drizzle-orm";
 import { ArrowRight, Newspaper, Search } from "lucide-react";
 import Link from "next/link";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { KepalaHalaman } from "@/components/publik/kepala-halaman";
 import { SampulBerita, sampulKategori } from "@/components/publik/sampul";
 import { Kartu, KartuIsi, KeadaanKosong, Lencana } from "@/components/ui/dasar";
 import { Input } from "@/components/ui/formulir";
@@ -84,17 +84,11 @@ export default async function HalamanBerita({ searchParams }: Props) {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
-          <Lencana nada="emas">Informasi</Lencana>
-          <h1 className="mt-3 text-3xl font-bold text-white">Berita &amp; Kegiatan</h1>
-          <p className="mt-2 max-w-2xl text-sm text-navy-100">
-            Kabar terbaru, artikel kepegawaian, dan dokumentasi kegiatan BKPSDM Kabupaten
-            Yahukimo.
-          </p>
-        </div>
-      </section>
+      <KepalaHalaman
+        label="Berita"
+        judul="Berita & Kegiatan"
+        deskripsi="Kabar terbaru, artikel kepegawaian, dan dokumentasi kegiatan BKPSDM Kabupaten Yahukimo."
+      />
 
       <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {/* Pencarian & kategori */}
@@ -164,7 +158,7 @@ export default async function HalamanBerita({ searchParams }: Props) {
                       <p className="mt-3 text-xs text-navy-400">
                         {tanggalPanjang(utama.tanggalTerbit)}
                       </p>
-                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-teal-700">
+                      <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-biru-600">
                         Baca selengkapnya <ArrowRight className="h-4 w-4" aria-hidden />
                       </span>
                     </KartuIsi>

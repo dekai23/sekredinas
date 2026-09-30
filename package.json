@@ -2,7 +2,7 @@
   "name": "sekredinas",
   "version": "0.1.0",
   "private": true,
-  "description": "SekreDinas - Sistem Aplikasi & Sistem Informasi BKPSDM Kabupaten Yahukimo",
+  "description": "BKPSDM Yahukimo - Sistem Aplikasi & Sistem Informasi Kepegawaian Kabupaten Yahukimo",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -319,7 +319,7 @@ export const skemaPengaturan = z.object({
   telepon: teks(30).default(""),
   ukuranKertas: teks(50).default("F4 (21,6 x 33 cm)"),
   zonaWaktu: teks(50).default("Asia/Jayapura"),
-  namaAplikasi: teks(80).default("SekreDinas"),
+  namaAplikasi: teks(80).default("BKPSDM Yahukimo"),
   sosmedWhatsapp: teks(300).default(""),
   sosmedFacebook: teks(300).default(""),
   sosmedInstagram: teks(300).default(""),

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { asc } from "drizzle-orm";
 import { Building2, Mail, MapPin, Phone } from "lucide-react";
 
-import { GelombangNavy } from "@/components/publik/ilustrasi";
+import { PolaGrid } from "@/components/publik/ilustrasi";
 import { Kartu, KartuIsi, KartuKepala, Lencana } from "@/components/ui/dasar";
 import { db, schema } from "@/lib/db";
 import { identitasInstansi } from "@/lib/data/instansi";
@@ -66,12 +66,20 @@ export default async function HalamanProfil() {
 
   return (
     <div>
-      <section className="relative overflow-hidden">
-        <GelombangNavy className="absolute inset-0" />
+      <section className="relative overflow-hidden bg-biru-900 text-white">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-br from-biru-600 via-biru-800 to-biru-950"
+        />
+        <PolaGrid className="text-white/10" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-biru-300/30 blur-3xl"
+        />
         <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6">
           <Lencana nada="emas">Profil Instansi</Lencana>
           <h1 className="mt-3 max-w-4xl text-3xl font-bold text-white">{instansi.namaBadan}</h1>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-navy-100">
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-biru-100">
             Instansi pemerintah daerah di Kabupaten Yahukimo yang melaksanakan urusan
             pemerintahan di bidang kepegawaian dan pengembangan sumber daya manusia.
           </p>

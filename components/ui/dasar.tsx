@@ -57,6 +57,7 @@ const varianLencana = cva(
     variants: {
       nada: {
         netral: "bg-navy-100 text-navy-700",
+        biru: "bg-biru-100 text-biru-700",
         emas: "bg-emas-100 text-emas-700",
         teal: "bg-teal-100 text-teal-700",
         sukses: "bg-emerald-100 text-emerald-700",
