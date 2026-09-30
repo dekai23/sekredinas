@@ -10,9 +10,14 @@
 
 [build]
   command = "npm run build"
-  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
 
 # Node 22 dipakai karena Next.js 16 memerlukan Node.js versi baru.
+#
+# Runtime Next.js resmi (OpenNext). Dipasang eksplisit karena situs Netlify
+# ini dibuat lewat drag-and-drop sehingga deteksi framework otomatis
+# (`framework: null`) tidak menjalankan adapter Next.js.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
