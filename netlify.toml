@@ -16,8 +16,8 @@
 
 # Node 22 dipakai karena Next.js 16 memerlukan Node.js versi baru.
 #
-# Runtime Next.js resmi (OpenNext). Dipasang eksplisit karena situs Netlify
-# ini dibuat lewat drag-and-drop sehingga deteksi framework otomatis
-# (`framework: null`) tidak menjalankan adapter Next.js.
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+# Runtime Next.js (OpenNext) dipasang otomatis oleh Netlify saat framework
+# terdeteksi dari repositori Git. Karena itu plugin sengaja TIDAK di-pin di
+# sini: men-deploy lewat situs yang dibuat dari drag-and-drop membuat deteksi
+# framework gagal (`framework: null`), sehingga runtime tidak terpasang.
+# Solusi: impor repositori ini lewat "Add new site -> Import from Git".
