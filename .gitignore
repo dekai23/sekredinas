@@ -56,3 +56,6 @@ desktop.ini
 uji-token-*.txt
 
 .opencode
+
+# Local Netlify folder
+.netlify
