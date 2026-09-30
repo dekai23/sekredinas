@@ -59,3 +59,6 @@ uji-token-*.txt
 
 # Local Netlify folder
 .netlify
+
+# Lockfile Deno yang dibuat otomatis oleh bundler edge Netlify (jangan ikut versi)
+deno.lock
