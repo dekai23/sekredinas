@@ -10,11 +10,6 @@ const nextConfig: NextConfig = {
   // PGlite hanya dipakai di sisi server; pastikan tidak ikut ter-bundle ke klien.
   // `postgres` juga dimasukkan karena paket itu memuat modul node (tls, net).
   serverExternalPackages: ["@electric-sql/pglite", "bcryptjs", "postgres"],
-  // Sertakan berkas migrasi & data seed pada fungsi /api/setup agar dapat
-  // menyiapkan database saat runtime (mis. di Netlify).
-  outputFileTracingIncludes: {
-    "/api/setup": ["./drizzle/**/*", "./seed/**/*"],
-  },
   async headers() {
     return [
       {
